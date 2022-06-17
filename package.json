@@ -1,0 +1,20 @@
+{
+  "name": "lekoala-silverstripe-admini",
+  "description": "Silverstripe Admini panel",
+  "author": "LeKoala",
+  "license": "MIT",
+  "dependencies": {
+    "admini": "^1.4.1"
+  },
+  "scripts": {
+    "build": "esbuild --bundle --minify --format=esm --sourcemap ./client/js/admini.js --outfile=./client/js/admini.min.js",
+    "watch": "npm run build -- --watch",
+    "compile-css": "sass ./node_modules/admini/src/scss/admini.scss:./client/css/admini.min.css --style compressed --load-path=node_modules/",
+    "watch-css": "npm run compile-css -- --watch --poll",
+    "prefix-css": "postcss ./client/css/admini.min.css --replace --use autoprefixer",
+    "rtl-css": "rtlcss ./client/css/admini.min.css ./client/css/admini.rtl.min.css",
+    "build-css": "npm run compile-css && npm run prefix-css && npm run rtl-css",
+    "copy": "shx cp -r ./node_modules/admini/static/css/* ./client/css/ && shx cp -r ./node_modules/admini/static/js/* ./client/js/"
+  },
+  "keywords": []
+}

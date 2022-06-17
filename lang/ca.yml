@@ -1,0 +1,6 @@
+ca:
+  LeKoala\Admini\SecurityAdmin:
+    GROUPNAME: 'Nom de grup'
+    MEMBERS: Membres
+    NEWGROUP: 'Nou grup'
+    PERMISSIONS: Permisos

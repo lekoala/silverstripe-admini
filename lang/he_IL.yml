@@ -1,0 +1,6 @@
+he_IL:
+  LeKoala\Admini\CMSBatchAction:
+    PUBLISHED_PAGES: 'פורסמו %d עמודים, %d שגיאות'
+    PUBLISH_PAGES: פרסום
+  LeKoala\Admini\SecurityAdmin:
+    NEWGROUP: 'קבוצה חדשה'

@@ -1,0 +1,6 @@
+is:
+  LeKoala\Admini\SecurityAdmin:
+    GROUPNAME: 'Nafn hóps'
+    MEMBERS: Félagar
+    PERMISSIONS: Leyfi
+    ROLES: Hlutverk

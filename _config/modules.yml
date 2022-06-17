@@ -1,0 +1,9 @@
+---
+Name: modules-admini
+After: modules-other
+Before: modules-framework
+---
+# https://docs.silverstripe.org/en/4/developer_guides/templates/template_inheritance/#declaring-module-priority
+SilverStripe\Core\Manifest\ModuleManifest:
+  module_priority:
+    - silverstripe/admini

@@ -1,0 +1,6 @@
+hu:
+  LeKoala\Admini\CMSBatchAction:
+    PUBLISHED_PAGES: '%d oldal publikálva, %d hibás'
+    PUBLISH_PAGES: Publikálni
+  LeKoala\Admini\SecurityAdmin:
+    NEWGROUP: 'Új csoport'

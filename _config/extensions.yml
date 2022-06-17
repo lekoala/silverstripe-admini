@@ -1,0 +1,11 @@
+---
+Name: admini-extensions
+After:
+  - "#versionedgridfield"
+---
+SilverStripe\Forms\FormField:
+  extensions:
+    - LeKoala\Admini\Forms\BootstrapFormFieldExtension
+SilverStripe\Forms\Form:
+  extensions:
+    - LeKoala\Admini\Forms\AdminiFormExtension

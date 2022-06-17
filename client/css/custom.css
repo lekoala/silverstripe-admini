@@ -1,0 +1,108 @@
+/* Input groups with holder div */
+.input-group > :first-child > input,
+.input-group > :first-child > select {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.input-group > :not(:first-child) > input,
+.input-group > :not(:first-child) > select {
+    margin-left: -1px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Dropup */
+
+.dropdown-menu label.btn {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    text-align: left;
+    background: transparent;
+    color: var(--bs-primary);
+}
+.dropdown-menu label.btn:hover {
+    background: var(--bs-light);
+}
+
+/* Provide global styles from SilverStripe */
+
+.fill-height,
+.fill-width {
+    display: flex;
+}
+.fill-height {
+    height: 100%;
+    min-height: 0;
+    flex-direction: column;
+}
+
+.toolbar--north {
+    background-image: none;
+    background-color: #f4f6f8;
+    border-bottom: 1px solid #ced5e1;
+    z-index: 60;
+    position: relative;
+    width: 100%;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+.toolbar,
+.toolbar--content,
+.toolbar--north,
+.toolbar--south {
+    width: 100%;
+    padding-right: 1.5385rem;
+    padding-left: 1.5385rem;
+    margin-right: auto;
+    margin-left: auto;
+    min-height: 53px;
+}
+.toolbar--south {
+    height: 53px;
+    padding-top: 0.76925rem;
+    padding-bottom: 0.76925rem;
+    border-top: 1px solid #ced5e1;
+    width: 100%;
+    background-color: #fafbfc;
+}
+.toolbar,
+.toolbar--content,
+.toolbar--north,
+.toolbar--south {
+    width: 100%;
+    padding-right: 1.5385rem;
+    padding-left: 1.5385rem;
+    margin-right: auto;
+    margin-left: auto;
+    min-height: 53px;
+}
+.panel {
+    overflow-x: auto;
+}
+.flexbox-area-grow {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 0%;
+    flex: 1 1 0%;
+    min-width: 0;
+}
+.panel--scrollable {
+    overflow: auto;
+}
+.panel--padded {
+    padding: 1.5385rem;
+}
+.panel {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+.panel {
+    overflow: hidden;
+}

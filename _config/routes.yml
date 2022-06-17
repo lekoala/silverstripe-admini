@@ -1,0 +1,9 @@
+---
+Name: adminiroutes
+After:
+  - "#rootroutes"
+  - "#coreroutes"
+---
+SilverStripe\Control\Director:
+  rules:
+    "admini": 'LeKoala\Admini\AdminiRootController'

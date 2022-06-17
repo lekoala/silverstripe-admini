@@ -1,0 +1,6 @@
+az:
+  LeKoala\Admini\SecurityAdmin:
+    GROUPNAME: 'Qrupun adı'
+    MEMBERS: Üzvlər
+    PERMISSIONS: Səlahiyyətlər
+    ROLES: Rollar

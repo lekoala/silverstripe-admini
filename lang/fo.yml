@@ -1,0 +1,6 @@
+fo:
+  LeKoala\Admini\SecurityAdmin:
+    GROUPNAME: Bólkaheiti
+    MEMBERS: Limir
+    NEWGROUP: 'Nýggjur bólkur'
+    PERMISSIONS: Rættindi

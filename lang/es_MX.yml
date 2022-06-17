@@ -1,0 +1,9 @@
+es_MX:
+  LeKoala\Admini\CMSBatchAction:
+    PUBLISHED_PAGES: 'Se publicaron %d páginas, %d fallos'
+    PUBLISH_PAGES: Publicar
+  LeKoala\Admini\SecurityAdmin:
+    GROUPNAME: 'Nombre de grupo'
+    MEMBERS: Miembros
+    NEWGROUP: 'Nuevo grupo'
+    PERMISSIONS: Permisos

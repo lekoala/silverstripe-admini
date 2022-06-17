@@ -1,0 +1,6 @@
+ro:
+  LeKoala\Admini\CMSBatchAction:
+    PUBLISHED_PAGES: '%d pagini publicate, %d erori'
+    PUBLISH_PAGES: Publicare
+  LeKoala\Admini\SecurityAdmin:
+    GROUPNAME: 'Numele grupului'

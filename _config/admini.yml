@@ -1,0 +1,16 @@
+---
+Name: admini
+After:
+  - "#defer-backend"
+---
+LeKoala\Admini\LeftAndMain:
+  svg_emoji: null
+  svg_icon: null
+  google_font: "family=Inter:wght@300;400;600&display=swap"
+  preload_fonts: []
+# Don't enable globally
+# LeKoala\DeferBackend\DeferBackend:
+#   enable_js_modules: true
+# SilverStripe\Core\Injector\Injector:
+#   SilverStripe\Forms\GridField\GridField:
+#     class: 'LeKoala\Tabulator\TabulatorGrid'

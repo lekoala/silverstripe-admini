@@ -1,0 +1,7 @@
+af:
+  LeKoala\Admini\SecurityAdmin:
+    GROUPNAME: 'Groep naam'
+    MEMBERS: Lede
+    PERMISSIONS: Toegangsregte
+    ROLES: Rolle
+    ROLESDESCRIPTION: ' '

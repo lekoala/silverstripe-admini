@@ -1,0 +1,8 @@
+tr:
+  LeKoala\Admini\CMSBatchAction:
+    PUBLISH_PAGES: Yayınla
+  LeKoala\Admini\SecurityAdmin:
+    GROUPNAME: 'Grup adı'
+    MEMBERS: Üyeler
+    NEWGROUP: 'Yeni Grup'
+    PERMISSIONS: İzinler

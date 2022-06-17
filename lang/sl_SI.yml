@@ -1,0 +1,5 @@
+sl_SI:
+  LeKoala\Admini\SecurityAdmin:
+    MEMBERS: Uporabniki
+    PERMISSIONS: Dovoljenja
+    ROLES: Vloge

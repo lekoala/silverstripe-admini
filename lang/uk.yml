@@ -1,0 +1,8 @@
+uk:
+  LeKoala\Admini\CMSBatchAction:
+    PUBLISHED_PAGES: 'Опубліковано %d сторінок, %d навдач'
+    PUBLISH_PAGES: Опублікувати
+  LeKoala\Admini\SecurityAdmin:
+    MEMBERS: Члени
+    NEWGROUP: 'Нова Група'
+    PERMISSIONS: Дозволи
