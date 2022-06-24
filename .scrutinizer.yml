@@ -1,6 +1,8 @@
 inherit: true
 
 build:
+  environment:
+    node: v16.15.0
   nodes:
     analysis:
       tests:
