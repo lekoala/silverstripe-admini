@@ -537,50 +537,14 @@ HTML;
             i18n::set_locale($member->Locale);
         }
 
-        // Allow customisation of the access check by a extension
-        // Also all the canView() check to execute Controller::redirect()
-        if (!$this->canView() && !$this->getResponse()->isFinished()) {
-            // When access /admin/, we should try a redirect to another part of the admin rather than be locked out
-            $menu = $this->MainMenu();
-            foreach ($menu as $candidate) {
-                $canView = $candidate->Link &&
-                    $candidate->Link != $this->Link()
-                    && $candidate->MenuItem->controller
-                    && singleton($candidate->MenuItem->controller)->canView();
-                if ($canView) {
-                    $this->redirect($candidate->Link);
-                    return;
-                }
-            }
-
-            if (Security::getCurrentUser()) {
-                $this->getRequest()->getSession()->clear("BackURL");
-            }
-
-            // if no alternate menu items have matched, return a permission error
-            $messageSet = array(
-                'default' => _t(
-                    __CLASS__ . '.PERMDEFAULT',
-                    "You must be logged in to access the administration area; please enter your credentials below."
-                ),
-                'alreadyLoggedIn' => _t(
-                    __CLASS__ . '.PERMALREADY',
-                    "I'm sorry, but you can't access that part of the CMS.  If you want to log in as someone else, do"
-                        . " so below."
-                ),
-                'logInAgain' => _t(
-                    __CLASS__ . '.PERMAGAIN',
-                    "You have been logged out of the CMS.  If you would like to log in again, enter a username and"
-                        . " password below."
-                ),
-            );
-
-            Security::permissionFailure($this, $messageSet);
-            return;
+        $response = $this->extendedCanView();
+        if ($response) {
+            return $response;
         }
 
         // Don't continue if there's already been a redirection request.
         if ($this->redirectedTo()) {
+            //TODO: check why we return nothing?
             return;
         }
 
@@ -622,6 +586,55 @@ HTML;
             // Set default reading mode to suppress ?stage=Stage querystring params in CMS
             Versioned::set_default_reading_mode(Versioned::get_reading_mode());
         }
+    }
+
+    /**
+     * Allow customisation of the access check by a extension
+     * Also all the canView() check to execute Controller::redirect()
+     * @return HTTPResponse|null
+     */
+    protected function extendedCanView()
+    {
+        if ($this->canView() || $this->getResponse()->isFinished()) {
+            return null;
+        }
+
+        // When access /admin/, we should try a redirect to another part of the admin rather than be locked out
+        $menu = $this->MainMenu();
+        foreach ($menu as $candidate) {
+            $canView = $candidate->Link &&
+                $candidate->Link != $this->Link()
+                && $candidate->MenuItem->controller
+                && singleton($candidate->MenuItem->controller)->canView();
+            if ($canView) {
+                $this->redirect($candidate->Link);
+                return;
+            }
+        }
+
+        if (Security::getCurrentUser()) {
+            $this->getRequest()->getSession()->clear("BackURL");
+        }
+
+        // if no alternate menu items have matched, return a permission error
+        $messageSet = array(
+            'default' => _t(
+                __CLASS__ . '.PERMDEFAULT',
+                "You must be logged in to access the administration area; please enter your credentials below."
+            ),
+            'alreadyLoggedIn' => _t(
+                __CLASS__ . '.PERMALREADY',
+                "I'm sorry, but you can't access that part of the CMS.  If you want to log in as someone else, do"
+                    . " so below."
+            ),
+            'logInAgain' => _t(
+                __CLASS__ . '.PERMAGAIN',
+                "You have been logged out of the CMS.  If you would like to log in again, enter a username and"
+                    . " password below."
+            ),
+        );
+
+        return Security::permissionFailure($this, $messageSet);
     }
 
     public function handleRequest(HTTPRequest $request)
