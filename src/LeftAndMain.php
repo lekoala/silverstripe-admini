@@ -999,7 +999,9 @@ HTML;
         $form->saveInto($record, true);
         $record->write();
         $this->extend('onAfterSave', $record);
-        $this->setCurrentPageID($record->ID);
+
+        //TODO: investigate if this is needed
+        // $this->setCurrentPageID($record->ID);
 
         $message = _t(__CLASS__ . '.SAVEDUP', 'Saved.');
         $this->sessionMessage($message, "good");
@@ -1071,7 +1073,7 @@ HTML;
      */
     public function getEditForm($id = null, $fields = null)
     {
-        if (!$id) {
+        if ($id === null || $id === 0) {
             $id = $this->currentPageID();
         }
 
@@ -1225,7 +1227,7 @@ HTML;
     }
 
     /**
-     * @return Form|bool
+     * @return Form|bool|array
      */
     public function printable()
     {
@@ -1276,7 +1278,7 @@ HTML;
         }
 
         if (is_numeric($this->getRequest()->param('ID'))) {
-            return $this->getRequest()->param('ID');
+            return (int)$this->getRequest()->param('ID');
         }
 
         /** @deprecated */
