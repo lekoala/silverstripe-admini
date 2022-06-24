@@ -5,6 +5,7 @@ namespace LeKoala\Admini\Traits;
 use Exception;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\ORM\ValidationResult;
 
 /**
