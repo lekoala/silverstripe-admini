@@ -57,8 +57,8 @@ use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware;
  *
  * This is essentially an abstract class which should be subclassed.
  *
- * @method alternateMenuDisplayCheck
- * @method alternateAccessCheck
+ * @method bool alternateMenuDisplayCheck(Member $member = null)
+ * @method bool alternateAccessCheck
  */
 class LeftAndMain extends Controller implements PermissionProvider
 {
