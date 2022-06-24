@@ -519,7 +519,9 @@ HTML;
         // SSViewer::config()->source_file_comments = true;
 
         // Replace GridField
-        Injector::inst()->registerService(new TabulatorGrid(""), \SilverStripe\Forms\GridField\GridField::class);
+        $defaultTabulator = new TabulatorGrid("");
+        Config::modify()->set(TabulatorGrid::class, "default_lazy_init", true);
+        Injector::inst()->registerService($defaultTabulator, \SilverStripe\Forms\GridField\GridField::class);
 
         DeferBackend::config()->enable_js_modules = true;
         DeferBackend::replaceBackend();

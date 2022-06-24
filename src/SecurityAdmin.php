@@ -99,17 +99,17 @@ class SecurityAdmin extends LeftAndMain implements PermissionProvider
             if ($params['FieldName'] == 'Groups') {
                 $crumbs->unshift(new ArrayData(array(
                     'Title' => Group::singleton()->i18n_plural_name(),
-                    'Link' => $this->Link('groups')
+                    'Link' => $this->Link() . '#Root_Groups'
                 )));
             } elseif ($params['FieldName'] == 'Users') {
                 $crumbs->unshift(new ArrayData(array(
                     'Title' => _t(__CLASS__ . '.TABUSERS', 'Users'),
-                    'Link' => $this->Link('users')
+                    'Link' => $this->Link() . '#Root_Users'
                 )));
             } elseif ($params['FieldName'] == 'Roles') {
                 $crumbs->unshift(new ArrayData(array(
                     'Title' => PermissionRole::singleton()->i18n_plural_name(),
-                    'Link' => $this->Link('roles')
+                    'Link' => $this->Link() . '#Root_Roles'
                 )));
             }
             $crumbs->unshift($firstCrumb);
