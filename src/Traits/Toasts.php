@@ -13,6 +13,11 @@ use SilverStripe\ORM\ValidationResult;
 trait Toasts
 {
     /**
+     * @return HTTPRequest
+     */
+    abstract public function getRequest();
+
+    /**
      * Set a message to the session, for display next time a page is shown.
      *
      * @param string $message the text of the message

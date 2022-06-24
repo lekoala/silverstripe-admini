@@ -2,59 +2,63 @@
 
 namespace LeKoala\Admini;
 
-use BadMethodCallException;
-use LeKoala\Admini\Traits\JsonResponse;
-use LeKoala\Admini\Traits\Toasts;
-use LeKoala\DeferBackend\CspProvider;
-use LeKoala\DeferBackend\DeferBackend;
-use LeKoala\Tabulator\TabulatorGrid;
 use LogicException;
-use SilverStripe\Control\ContentNegotiator;
-use SilverStripe\Control\Controller;
-use SilverStripe\Control\Cookie;
-use SilverStripe\Control\Director;
-use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Control\HTTPResponse;
-use SilverStripe\Control\HTTPResponse_Exception;
-use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware;
-use SilverStripe\Core\ClassInfo;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Core\Manifest\VersionProvider;
-use SilverStripe\Dev\Deprecation;
-use SilverStripe\Dev\TestOnly;
-use SilverStripe\Forms\FieldList;
+use BadMethodCallException;
+use SilverStripe\i18n\i18n;
 use SilverStripe\Forms\Form;
+use SilverStripe\ORM\SS_List;
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\View\SSViewer;
+use SilverStripe\Control\Cookie;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\View\ArrayData;
+use LeKoala\Admini\Traits\Toasts;
+use SilverStripe\Dev\Deprecation;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Security\Member;
+use SilverStripe\Control\Director;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\Forms\HTMLEditor\HTMLEditorConfig;
-use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
-use SilverStripe\Forms\PrintableTransformation;
-use SilverStripe\i18n\i18n;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\FieldType\DBField;
-use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\ORM\Hierarchy\Hierarchy;
-use SilverStripe\ORM\SS_List;
-use SilverStripe\ORM\ValidationException;
-use SilverStripe\ORM\ValidationResult;
-use SilverStripe\Security\Member;
-use SilverStripe\Security\Permission;
-use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
-use SilverStripe\Security\SecurityToken;
-use SilverStripe\SiteConfig\SiteConfig;
-use SilverStripe\Versioned\Versioned;
-use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
-use SilverStripe\View\SSViewer;
+use LeKoala\Tabulator\TabulatorGrid;
+use SilverStripe\Control\Controller;
+use SilverStripe\Core\Config\Config;
+use LeKoala\DeferBackend\CspProvider;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Security\Permission;
+use SilverStripe\Versioned\Versioned;
+use LeKoala\DeferBackend\DeferBackend;
+use SilverStripe\Control\HTTPResponse;
+use SilverStripe\ORM\ValidationResult;
+use LeKoala\Admini\Traits\JsonResponse;
+use SilverStripe\ORM\FieldType\DBField;
+use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Security\SecurityToken;
+use SilverStripe\ORM\Hierarchy\Hierarchy;
+use SilverStripe\ORM\ValidationException;
+use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\Control\ContentNegotiator;
+use SilverStripe\Core\Manifest\ModuleLoader;
+use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Core\Manifest\VersionProvider;
+use SilverStripe\Forms\PrintableTransformation;
+use SilverStripe\Control\HTTPResponse_Exception;
+use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorConfig;
+use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware;
 
 /**
  * LeftAndMain is the parent class of all the two-pane views in the CMS.
  * If you are wanting to add more areas to the CMS, you can do it by subclassing LeftAndMain.
  *
  * This is essentially an abstract class which should be subclassed.
+ *
+ * @method alternateMenuDisplayCheck
+ * @method alternateAccessCheck
  */
 class LeftAndMain extends Controller implements PermissionProvider
 {
@@ -407,6 +411,14 @@ HTML;
         return $icon;
     }
 
+    public function AdminDir(): string
+    {
+        $path = "js/admini.js";
+        $resource = ModuleLoader::getModule('lekoala/silverstripe-base')->getResource($path);
+        $dir = dirname($resource->getRelativePath());
+        return $dir;
+    }
+
     /**
      * Preload fonts
      */
@@ -685,7 +697,7 @@ HTML;
 
     /**
      * @param HTTPRequest $request
-     * @return HTTPResponse
+     * @return HTTPResponse|SilverStripe\ORM\FieldType\DBHTMLText
      */
     public function index($request)
     {
@@ -766,16 +778,16 @@ HTML;
 
     /**
      * @param HTTPRequest $request
-     * @return HTTPResponse
+     * @return HTTPResponse|SilverStripe\ORM\FieldType\DBHTMLText
      * @throws HTTPResponse_Exception
      */
     public function show($request)
     {
         // TODO Necessary for TableListField URLs to work properly
         // TODO: check why this is needed
-        if ($request->param('ID')) {
-            $this->setCurrentPageID($request->param('ID'));
-        }
+        // if ($request->param('ID')) {
+        //     $this->setCurrentPageID($request->param('ID'));
+        // }
         return $this->renderWith($this->getViewer('show'));
     }
 
@@ -791,7 +803,8 @@ HTML;
      */
     public function MainMenu($cached = true)
     {
-        if (!isset($this->_cache_MainMenu) || !$cached) {
+        static $menuCache = null;
+        if ($menuCache === null || !$cached) {
             // Don't accidentally return a menu if you're not logged in - it's used to determine access.
             if (!Security::getCurrentUser()) {
                 return new ArrayList();
@@ -872,10 +885,10 @@ HTML;
                 Requirements::customCSS($menuIconStyling);
             }
 
-            $this->_cache_MainMenu = $menu;
+            $menuCache = $menu;
         }
 
-        return $this->_cache_MainMenu;
+        return $menuCache;
     }
 
     public function Menu()
@@ -924,6 +937,7 @@ HTML;
             return null;
         }
         if ($id instanceof $className) {
+            /** @var DataObject $id */
             return $id;
         }
         if ($id === 'root') {
@@ -1177,7 +1191,7 @@ HTML;
      * and takes the most specific template (see {@link getTemplatesWithSuffix()}).
      * To explicitly disable the panel in the subclass, simply create a more specific, empty template.
      *
-     * @return string HTML
+     * @return string|bool HTML
      */
     public function Tools()
     {
@@ -1185,9 +1199,8 @@ HTML;
         if ($templates) {
             $viewer = SSViewer::create($templates);
             return $viewer->process($this);
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -1199,7 +1212,7 @@ HTML;
      * Any form fields contained in the returned markup will also be submitted with the main form,
      * which might be desired depending on the implementation details.
      *
-     * @return string HTML
+     * @return string|bool HTML
      */
     public function EditFormTools()
     {
@@ -1207,11 +1220,13 @@ HTML;
         if ($templates) {
             $viewer = SSViewer::create($templates);
             return $viewer->process($this);
-        } else {
-            return false;
         }
+        return false;
     }
 
+    /**
+     * @return Form|bool
+     */
     public function printable()
     {
         $form = $this->getEditForm($this->currentPageID());

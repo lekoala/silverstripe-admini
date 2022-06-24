@@ -2,11 +2,21 @@
 
 namespace LeKoala\Admini\Traits;
 
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\HTTPResponse_Exception;
 
 trait JsonResponse
 {
+    /**
+     * @return HTTPRequest
+     */
+    abstract public function getRequest();
+    /**
+     * @return array
+     */
+    abstract public function extend($method, &$a1 = null, &$a2 = null, &$a3 = null, &$a4 = null, &$a5 = null, &$a6 = null, &$a7 = null);
+
     /**
      * Return an error HTTPResponse encoded as json
      *

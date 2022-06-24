@@ -174,12 +174,12 @@ class CMSMenu implements IteratorAggregate, i18nEntityProvider
      * Get a single menu item by its code value.
      *
      * @param string $code
-     * @return array
+     * @return array|null
      */
     public static function get_menu_item($code)
     {
         $menuItems = self::get_menu_items();
-        return (isset($menuItems[$code])) ? $menuItems[$code] : false;
+        return (isset($menuItems[$code])) ? $menuItems[$code] : null;
     }
 
     /**
@@ -237,7 +237,7 @@ class CMSMenu implements IteratorAggregate, i18nEntityProvider
             $menuPriority[$key] = is_numeric($menuItem->priority) ? $menuItem->priority : 0;
             $menuTitle[$key]    = $menuItem->title;
         }
-        array_multisort($menuPriority, SORT_DESC, $menuTitle, SORT_ASC, $menuItems);
+        array_multisort($menuPriority, \SORT_DESC, $menuTitle, \SORT_ASC, $menuItems);
 
         return $menuItems;
     }
