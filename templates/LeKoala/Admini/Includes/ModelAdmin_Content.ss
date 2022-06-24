@@ -22,13 +22,15 @@
         </nav>
     </div>
     <div class="main-header-nav main-header-tabs">
-        <ul class="nav nav-tabs nav-tabs-responsive" role="tablist">
+        <bs-tabs responsive="1" end>
+        <ul class="nav nav-tabs" role="tablist">
         <% loop $ManagedModelTabs %>
             <li class="nav-item <% if extraClass %>$extraClass<% end_if %>">
                 <a class="nav-link<% if $LinkOrCurrent == 'current' %> active<% end_if %>" href="$Link">$Title</a>
             </li>
         <% end_loop %>
         </ul>
+        </bs-tabs>
     </div>
 </header>
 
