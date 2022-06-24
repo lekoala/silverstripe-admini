@@ -697,7 +697,7 @@ HTML;
 
     /**
      * @param HTTPRequest $request
-     * @return HTTPResponse|SilverStripe\ORM\FieldType\DBHTMLText
+     * @return HTTPResponse|DBHTMLText
      */
     public function index($request)
     {
@@ -778,7 +778,7 @@ HTML;
 
     /**
      * @param HTTPRequest $request
-     * @return HTTPResponse|SilverStripe\ORM\FieldType\DBHTMLText
+     * @return HTTPResponse|DBHTMLText
      * @throws HTTPResponse_Exception
      */
     public function show($request)
