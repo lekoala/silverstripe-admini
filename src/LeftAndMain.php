@@ -47,8 +47,6 @@ use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Core\Manifest\VersionProvider;
 use SilverStripe\Forms\PrintableTransformation;
 use SilverStripe\Control\HTTPResponse_Exception;
-use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
-use SilverStripe\Forms\HTMLEditor\HTMLEditorConfig;
 use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware;
 
 /**
@@ -58,7 +56,7 @@ use SilverStripe\Control\Middleware\HTTPCacheControlMiddleware;
  * This is essentially an abstract class which should be subclassed.
  *
  * @method bool alternateMenuDisplayCheck(Member $member = null)
- * @method bool alternateAccessCheck
+ * @method bool alternateAccessCheck(Member $member = null)
  */
 class LeftAndMain extends Controller implements PermissionProvider
 {
@@ -125,13 +123,6 @@ class LeftAndMain extends Controller implements PermissionProvider
         'show',
         'EditForm',
     ];
-
-    /**
-     * Current pageID for this request
-     *
-     * @var null
-     */
-    protected $pageID = null;
 
     /**
      * Assign themes to use for cms
@@ -234,11 +225,6 @@ class LeftAndMain extends Controller implements PermissionProvider
     private static $section_name = null;
 
     /**
-     * @var VersionProvider
-     */
-    protected $versionProvider;
-
-    /**
      * @var array
      * @config
      */
@@ -274,6 +260,18 @@ class LeftAndMain extends Controller implements PermissionProvider
      * @var string
      */
     private static $application_name = 'Silverstripe';
+
+    /**
+     * Current pageID for this request
+     *
+     * @var null
+     */
+    protected $pageID = null;
+
+    /**
+     * @var VersionProvider
+     */
+    protected $versionProvider;
 
     /**
      * @param Member $member
