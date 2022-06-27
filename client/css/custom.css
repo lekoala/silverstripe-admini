@@ -1,14 +1,23 @@
-/* Input groups with holder div */
-.input-group > :first-child > input,
-.input-group > :first-child > select {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+/* Option set */
+
+.optionset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
-.input-group > :not(:first-child) > input,
-.input-group > :not(:first-child) > select {
-    margin-left: -1px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+
+.checkboxsetfieldpermissioncheckboxset input.checkbox,
+.checkboxsetfieldpermissioncheckboxsetfield_readonly input.checkbox {
+    margin-right: 0.5rem;
+}
+.checkboxsetfieldpermissioncheckboxsetfield_readonly h5,
+.checkboxsetfieldpermissioncheckboxset h5 {
+    font-size: 1.2em;
+    margin-top: 1rem;
+}
+.checkboxsetfieldpermissioncheckboxsetfield_readonly li:first-child h5,
+.checkboxsetfieldpermissioncheckboxset li:first-child h5 {
+    margin-top: 0;
 }
 
 /* Dropup */
@@ -23,6 +32,12 @@
 }
 .dropdown-menu label.btn:hover {
     background: var(--bs-light);
+}
+
+/* HR */
+
+hr {
+    height: 1px;
 }
 
 /* Provide global styles from SilverStripe */

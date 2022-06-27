@@ -18,7 +18,6 @@ use LeKoala\Admini\Traits\Toasts;
 use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
-use SilverStripe\Control\Director;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Security\Security;
@@ -32,12 +31,10 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
 use LeKoala\DeferBackend\DeferBackend;
 use SilverStripe\Control\HTTPResponse;
-use SilverStripe\ORM\ValidationResult;
 use LeKoala\Admini\Traits\JsonResponse;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Security\SecurityToken;
 use SilverStripe\ORM\Hierarchy\Hierarchy;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\ORM\FieldType\DBHTMLText;
@@ -523,6 +520,17 @@ HTML;
         Config::modify()->set(TabulatorGrid::class, "default_lazy_init", true);
         Injector::inst()->registerService($defaultTabulator, \SilverStripe\Forms\GridField\GridField::class);
 
+        // HTMLEditor using Jodit if it exists
+        if (class_exists(\LeKoala\Jodit\JoditEditor::class)) {
+            $defaultEditor = new \LeKoala\Jodit\JoditEditor("");
+            Injector::inst()->registerService($defaultEditor, \SilverStripe\Forms\HTMLEditor\HTMLEditorField::class);
+        }
+        // Upload fields using Filepond if it exists
+        if (class_exists(\LeKoala\FilePond\FilePondField::class)) {
+            $defaultUploader = new \LeKoala\FilePond\FilePondField("");
+            Injector::inst()->registerService($defaultUploader, \SilverStripe\AssetAdmin\Forms\UploadField::class);
+        }
+
         DeferBackend::config()->enable_js_modules = true;
         DeferBackend::replaceBackend();
 
@@ -588,6 +596,20 @@ HTML;
             // Set default reading mode to suppress ?stage=Stage querystring params in CMS
             Versioned::set_default_reading_mode(Versioned::get_reading_mode());
         }
+    }
+
+    public function LinkHash($action = null): string
+    {
+        $request = $this->getRequest();
+        $hash = Cookie::get("hash");
+        if ($request->isPOST()) {
+            $hash = $request->postVar("_hash");
+        }
+        $link = $this->Link($action);
+        if ($hash) {
+            $link .= $hash;
+        }
+        return $link;
     }
 
     /**

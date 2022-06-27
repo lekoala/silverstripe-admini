@@ -156,7 +156,7 @@ class SiteConfigLeftAndMain extends LeftAndMain
         //     return $form->forTemplate();
         // }
         $this->successMessage($message);
-        return $this->redirectBack();
+        return $this->redirect($this->LinkHash());
     }
 
     public function Breadcrumbs($unlinked = false)

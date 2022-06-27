@@ -1,5 +1,6 @@
 <% if $IncludeFormTag %>
 <form $FormAttributes>
+<input type="hidden" name="_hash" value="" />
 <% end_if %>
 
 <header class="main-header">

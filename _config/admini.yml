@@ -14,3 +14,7 @@ LeKoala\Admini\LeftAndMain:
 # SilverStripe\Core\Injector\Injector:
 #   SilverStripe\Forms\GridField\GridField:
 #     class: 'LeKoala\Tabulator\TabulatorGrid'
+# No injector is used, so we cannot extend
+# SilverStripe\Core\Injector\Injector:
+#   SilverStripe\Security\PermissionCheckboxSetField:
+#     class: 'LeKoala\Admini\Forms\BootstrapPermissionCheckboxSetField'
