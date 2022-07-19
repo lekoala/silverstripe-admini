@@ -34,7 +34,12 @@
         "installer-name": "admini",
         "expose": [
             "client"
-        ]
+        ],
+        "allow-plugins": {
+            "composer/installers": true,
+            "silverstripe/vendor-plugin": true,
+            "silverstripe/recipe-plugin": true
+        }
     },
     "autoload": {
         "psr-4": {
