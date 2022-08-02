@@ -15,7 +15,7 @@
     data-frameworkpath="$ModulePath(silverstripe/framework)"
     data-member-tempid="$CurrentMember.TempIDHash.ATT">
     <%-- include LeKoala\Admini\ToastMessages --%>
-	<div class="wrapper-fixed">
+	<div class="wrapper">
 		$Menu
         $Tools
         <main class="main $BaseCSSClasses">
