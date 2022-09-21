@@ -14,7 +14,6 @@ LeKoala\Admini\LeftAndMain:
     LeKoala\FilePond\FilePondField: SilverStripe\AssetAdmin\Forms\UploadField
     LeKoala\Admini\Forms\BootstrapTagsField: SilverStripe\Forms\ListboxField
     LeKoala\Tabulator\TabulatorGrid: SilverStripe\Forms\GridField\GridField
-    LeKoala\Admini\Forms\BootstrapPermissionCheckboxSetField: SilverStripe\Security\PermissionCheckboxSetField
 ---
 Name: modular-behaviour-admini
 After:
