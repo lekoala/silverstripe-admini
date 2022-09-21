@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\SiteConfig\SiteConfig;
+namespace SilverStripe\SiteConfig;
 
 use SilverStripe\Control\Controller;
 use SilverStripe\Forms\FieldList;
@@ -36,6 +36,8 @@ use SilverStripe\View\TemplateGlobalProvider;
  */
 class SiteConfig extends DataObject implements PermissionProvider, TemplateGlobalProvider
 {
+    const IS_COMPAT = true; // flag
+
     private static $db = [
         "Title" => "Varchar(255)",
         "Tagline" => "Varchar(255)",
