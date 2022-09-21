@@ -8,16 +8,13 @@ LeKoala\Admini\LeftAndMain:
   svg_icon: null
   google_font: "family=Inter:wght@300;400;600&display=swap"
   preload_fonts: []
-# Don't enable globally
-# LeKoala\DeferBackend\DeferBackend:
-#   enable_js_modules: true
-# SilverStripe\Core\Injector\Injector:
-#   SilverStripe\Forms\GridField\GridField:
-#     class: 'LeKoala\Tabulator\TabulatorGrid'
-# No injector is used, so we cannot extend
-# SilverStripe\Core\Injector\Injector:
-#   SilverStripe\Security\PermissionCheckboxSetField:
-#     class: 'LeKoala\Admini\Forms\BootstrapPermissionCheckboxSetField'
+  # Specify replacement => replaced class
+  replacement_services:
+    LeKoala\Jodit\JoditEditor: SilverStripe\Forms\HTMLEditor\HTMLEditorField
+    LeKoala\FilePond\FilePondField: SilverStripe\AssetAdmin\Forms\UploadField
+    LeKoala\Admini\Forms\BootstrapTagsField: SilverStripe\Forms\ListboxField
+    LeKoala\Tabulator\TabulatorGrid: SilverStripe\Forms\GridField\GridField
+    LeKoala\Admini\Forms\BootstrapPermissionCheckboxSetField: SilverStripe\Security\PermissionCheckboxSetField
 ---
 Name: modular-behaviour-admini
 After:

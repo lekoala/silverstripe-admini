@@ -515,20 +515,22 @@ HTML;
 
         // SSViewer::config()->source_file_comments = true;
 
-        // Replace GridField
-        $defaultTabulator = new TabulatorGrid("");
+        // Lazy by default
         Config::modify()->set(TabulatorGrid::class, "default_lazy_init", true);
-        Injector::inst()->registerService($defaultTabulator, \SilverStripe\Forms\GridField\GridField::class);
 
-        // HTMLEditor using Jodit if it exists
-        if (class_exists(\LeKoala\Jodit\JoditEditor::class)) {
-            $defaultEditor = new \LeKoala\Jodit\JoditEditor("");
-            Injector::inst()->registerService($defaultEditor, \SilverStripe\Forms\HTMLEditor\HTMLEditorField::class);
-        }
-        // Upload fields using Filepond if it exists
-        if (class_exists(\LeKoala\FilePond\FilePondField::class)) {
-            $defaultUploader = new \LeKoala\FilePond\FilePondField("");
-            Injector::inst()->registerService($defaultUploader, \SilverStripe\AssetAdmin\Forms\UploadField::class);
+        // Replace classes
+        $replacementServices = self::config()->replacement_services;
+        if ($replacementServices) {
+            $replacementConfig = [];
+            foreach ($replacementServices as $replacement => $replaced) {
+                if (!class_exists($replacement)) {
+                    continue;
+                }
+                $replacementConfig[$replaced] = [
+                    'class' => $replacement
+                ];
+            }
+            Injector::inst()->load($replacementConfig);
         }
 
         DeferBackend::config()->enable_js_modules = true;
@@ -590,11 +592,12 @@ HTML;
 
         // Versioned support
         if (class_exists(Versioned::class)) {
+            // Make ide happy by not using a potentially undefined class
+            $class = Versioned::class;
             // Set the current reading mode
-            Versioned::set_stage(Versioned::DRAFT);
-
+            $class::set_stage($class::DRAFT);
             // Set default reading mode to suppress ?stage=Stage querystring params in CMS
-            Versioned::set_default_reading_mode(Versioned::get_reading_mode());
+            $class::set_default_reading_mode($class::get_reading_mode());
         }
     }
 
