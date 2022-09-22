@@ -8,6 +8,6 @@ if (!class_exists(SilverStripe\SiteConfig\SiteConfig::class)) {
     if (is_file($ignoreCompatFile)) {
         unlink($ignoreCompatFile);
     }
-} elseif (defined(SilverStripe\SiteConfig\SiteConfig::IS_COMPAT)) {
+} elseif (defined("SilverStripe\SiteConfig\SiteConfig::IS_COMPAT")) {
     file_put_contents($ignoreCompatFile, "");
 }
