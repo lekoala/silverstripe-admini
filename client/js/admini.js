@@ -9,6 +9,7 @@ import AdminiUi from "../../node_modules/admini/src/js/ui.js";
 import escapeHTML from "../../node_modules/admini/src/js/bs-companion/escape-html";
 import toaster from "../../node_modules/admini/src/js/bs-companion/toaster.js";
 import modalizer, { modalizerConfirm } from "../../node_modules/admini/src/js/bs-companion/modalizer.js";
+import SilverStripe from "./silverstripe.js";
 
 // Make globally available
 // window.bootstrap = bootstrap;
@@ -21,6 +22,7 @@ let ui = new AdminiUi();
 let init = () => {
   BSN.init();
   window.admini.ui.init();
+  SilverStripe.init();
 //   window.admini.forms.init();
 };
 
