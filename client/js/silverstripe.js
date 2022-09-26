@@ -10,6 +10,13 @@ class SilverStripe {
                 const hidden = a.parentElement.querySelector(".d-none");
                 hidden.classList.remove("d-none");
                 a.classList.add("d-none");
+
+                // add value to hidden field if any
+                const input =
+                    a.parentElement.querySelector("input[type=hidden]");
+                if (input) {
+                    input.value = 1;
+                }
             });
         });
     }
