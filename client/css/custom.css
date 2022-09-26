@@ -121,3 +121,10 @@ hr {
 .panel {
     overflow: hidden;
 }
+
+/*
+Fix links
+*/
+.toast.text-white a {
+    color: var(--bs-light);
+}
