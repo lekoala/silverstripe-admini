@@ -128,3 +128,10 @@ Fix links
 .toast.text-white a {
     color: var(--bs-light);
 }
+
+/*
+Otherwise you don't see the disabled color
+*/
+.btn-light.disabled {
+    opacity: 0.25;
+}
