@@ -1,4 +1,4 @@
 .DS_Store
 npm-debug.log
 node_modules
-_compat/manifest_exclude
+_compat/_manifest_exclude
