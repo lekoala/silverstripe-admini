@@ -374,6 +374,11 @@ JS;
         Requirements::insertHeadTags($lastIconScript, __FUNCTION__);
     }
 
+    public function UseBootstrap5()
+    {
+        return true;
+    }
+
     protected function includeFavicon()
     {
         $icon = $this->MainSvgIcon();
