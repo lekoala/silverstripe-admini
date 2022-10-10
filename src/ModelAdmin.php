@@ -237,7 +237,7 @@ abstract class ModelAdmin extends LeftAndMain
      */
     protected function sanitiseClassName($class)
     {
-        return str_replace('\\', '-', $class);
+        return str_replace('\\', '-', $class ?? '');
     }
 
     /**
@@ -248,7 +248,7 @@ abstract class ModelAdmin extends LeftAndMain
      */
     protected function unsanitiseClassName($class)
     {
-        return str_replace('-', '\\', $class);
+        return str_replace('-', '\\', $class ?? '');
     }
 
     /**

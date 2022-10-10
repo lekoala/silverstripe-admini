@@ -34,6 +34,7 @@ use SilverStripe\Control\HTTPResponse;
 use LeKoala\Admini\Traits\JsonResponse;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\SiteConfig\SiteConfig;
+use LeKoala\Admini\Subsites\HasSubsites;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\Hierarchy\Hierarchy;
 use SilverStripe\ORM\ValidationException;
@@ -59,6 +60,7 @@ class LeftAndMain extends Controller implements PermissionProvider
 {
     use JsonResponse;
     use Toasts;
+    use HasSubsites;
 
     /**
      * The current url segment attached to the LeftAndMain instance
@@ -542,6 +544,7 @@ HTML;
         DeferBackend::replaceBackend();
 
         $this->showToasterMessage();
+        $this->blockSubsiteRequirements();
 
         HTTPCacheControlMiddleware::singleton()->disableCache();
 

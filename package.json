@@ -14,6 +14,7 @@
     "prefix-css": "postcss ./client/css/admini.min.css --replace --use autoprefixer",
     "rtl-css": "rtlcss ./client/css/admini.min.css ./client/css/admini.rtl.min.css",
     "build-css": "npm run compile-css && npm run prefix-css && npm run rtl-css",
+    "build-all": "npm run build && npm run build-css",
     "copy": "shx cp -r ./node_modules/admini/static/css/* ./client/css/ && shx cp -r ./node_modules/admini/static/js/* ./client/js/"
   },
   "keywords": []

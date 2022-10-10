@@ -259,8 +259,7 @@ class CMSMenu implements IteratorAggregate, i18nEntityProvider
         $allMenuItems = self::get_menu_items();
         if ($allMenuItems) {
             foreach ($allMenuItems as $code => $menuItem) {
-                // exclude all items which have a controller to perform permission
-                // checks on
+                // exclude all items which have a controller to perform permission checks on
                 if ($menuItem->controller) {
                     $controllerObj = singleton($menuItem->controller);
                     if (Controller::has_curr()) {

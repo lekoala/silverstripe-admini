@@ -1,5 +1,13 @@
 <aside id="sidebar" class="sidebar" data-bs-scroll="true">
     <% include LeKoala\\Admini\\LeftAndMain_MenuLogo %>
+
+    <%-- Subsites --%>
+    <select name="" id="sidebar-selector" class="form-select">
+    <% loop $ListSubsitesExpanded %>
+        <option value="$ID" $CurrentState<% if not $CurrentState %> style="color:$Color;background:$BackgroundColor"<% end_if %>>$Title.RAW&nbsp;&nbsp;</option>
+    <% end_loop %>
+    </select>
+
     <% include LeKoala\\Admini\\LeftAndMain_MenuStatus %>
 
     <div class="sidebar-content scroller">

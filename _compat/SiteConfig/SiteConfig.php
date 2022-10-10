@@ -71,6 +71,11 @@ class SiteConfig extends DataObject implements PermissionProvider, TemplateGloba
         'CMS_ACCESS_LeftAndMain'
     ];
 
+    public function subsiteCMSShowInMenu()
+    {
+        return true;
+    }
+
     public function populateDefaults()
     {
         $this->Title = _t(self::class . '.SITENAMEDEFAULT', "Your Site Name");
