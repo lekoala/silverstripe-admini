@@ -61,6 +61,10 @@ trait HasSubsites
 
     public function blockSubsiteRequirements()
     {
+        // We need this since block will try to resolve module path :-(
+        if (!class_exists(SubsiteState::class)) {
+            return;
+        }
         Requirements::block('silverstripe/subsites:css/LeftAndMain_Subsites.css');
         Requirements::block('silverstripe/subsites:javascript/LeftAndMain_Subsites.js');
         Requirements::block('silverstripe/subsites:javascript/VirtualPage_Subsites.js');
