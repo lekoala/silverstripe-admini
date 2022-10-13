@@ -20,7 +20,8 @@ trait HasSubsites
         if (!class_exists(SubsiteState::class)) {
             return false;
         }
-        $id = SubsiteState::singleton()->getSubsiteId();
+        $class = SubsiteState::class;
+        $id = $class::singleton()->getSubsiteId();
         return DataObject::get_by_id(Subsite::class, $id);
     }
 
@@ -30,7 +31,8 @@ trait HasSubsites
             return false;
         }
 
-        $list = Subsite::all_accessible_sites();
+        $class = Subsite::class;
+        $list = $class::all_accessible_sites();
         if ($list == null || $list->count() == 1 && $list->first()->DefaultSite == true) {
             return false;
         }
