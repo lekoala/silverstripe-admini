@@ -1,6 +1,6 @@
 <?php
 
-namespace LeKoala\Admini\SiteConfig;
+namespace LeKoala\Admini;
 
 use SilverStripe\Forms\Form;
 use LeKoala\Admini\LeftAndMain;

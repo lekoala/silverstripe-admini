@@ -265,7 +265,7 @@ class SiteConfig extends DataObject implements PermissionProvider, TemplateGloba
     public function CMSEditLink()
     {
         if (Controller::curr() instanceof \LeKoala\Admini\LeftAndMain) {
-            return \LeKoala\Admini\SiteConfig\SiteConfigLeftAndMain::singleton()->Link();
+            return \LeKoala\Admini\SiteConfigLeftAndMain::singleton()->Link();
         }
         return \SilverStripe\SiteConfig\SiteConfigLeftAndMain::singleton()->Link();
     }
