@@ -2,16 +2,17 @@
 
 namespace LeKoala\Admini;
 
-use LeKoala\Tabulator\TabulatorGrid;
-use SilverStripe\Forms\FieldList;
+use SilverStripe\ORM\DB;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\Security\Group;
-use SilverStripe\Security\Member;
-use SilverStripe\Security\Permission;
-use SilverStripe\Security\PermissionProvider;
-use SilverStripe\Security\PermissionRole;
 use SilverStripe\View\ArrayData;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Security\Member;
+use LeKoala\Tabulator\TabulatorGrid;
+use SilverStripe\Security\Permission;
+use SilverStripe\Security\PermissionRole;
+use SilverStripe\Security\PermissionProvider;
 
 /**
  * Security section of the CMS
@@ -37,16 +38,27 @@ class SecurityAdmin extends LeftAndMain implements PermissionProvider
         'EditForm',
     ];
 
+
+    /**
+     * @return array
+     */
+    public static function getMembersFromSecurityGroupsIDs()
+    {
+        $sql = 'SELECT DISTINCT MemberID FROM Group_Members INNER JOIN Permission ON Permission.GroupID = Group_Members.GroupID WHERE Code LIKE \'CMS_%\' OR Code = \'ADMIN\'';
+        return DB::query($sql)->column();
+    }
+
     public function getEditForm($id = null, $fields = null)
     {
         $fields = new FieldList();
         $fields->push(new TabSet('Root'));
 
-        // Build gridfield
+        // Build member fields (display only relevant security members)
+        $membersOfGroups = self::getMembersFromSecurityGroupsIDs();
         $memberField = new TabulatorGrid(
             'Members',
             false,
-            Member::get(),
+            Member::get()->filter("ID", $membersOfGroups),
         );
         $membersTab = $fields->findOrMakeTab('Root.Users', _t(__CLASS__ . '.TABUSERS', 'Users'));
         $membersTab->push($memberField);
