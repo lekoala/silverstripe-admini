@@ -34,6 +34,7 @@ trait Toasts
             case ValidationResult::TYPE_ERROR:
                 $color = "danger";
                 break;
+            case "success":
             case ValidationResult::TYPE_GOOD:
                 $color = "success";
                 break;
