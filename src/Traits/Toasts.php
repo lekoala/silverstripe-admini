@@ -79,10 +79,14 @@ trait Toasts
         $ToastMessage = $this->ToastMessage();
         if ($ToastMessage) {
             $Body = addslashes($ToastMessage->Message);
+
+            // Don't hide errors automatically
+            $autohide = $ToastMessage->Type == ValidationResult::TYPE_GOOD ? "true" : "false";
             $toastScript = <<<JS
 toaster({
     body: '{$Body}',
-    className: 'border-0 bg-{$ToastMessage->ThemeColor} text-white'
+    className: 'border-0 bg-{$ToastMessage->ThemeColor} text-white',
+    autohide: {$autohide}
 });
 JS;
             Requirements::customScript($toastScript, __FUNCTION__);
