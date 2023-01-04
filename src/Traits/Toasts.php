@@ -82,7 +82,6 @@ trait Toasts
 
             // Don't hide errors automatically
             $autohide = $ToastMessage->Type == ValidationResult::TYPE_GOOD ? "true" : "false";
-            $autohide = true;
             $toastScript = <<<JS
 toaster({
     body: '{$Body}',
