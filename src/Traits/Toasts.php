@@ -76,10 +76,12 @@ trait Toasts
 
     public function showToasterMessage()
     {
-        if ($ToastMessage = $this->ToastMessage()) {
+        $ToastMessage = $this->ToastMessage();
+        if ($ToastMessage) {
+            $Body = addslashes($ToastMessage->Message);
             $toastScript = <<<JS
-admini.toaster({
-    body: '{$ToastMessage->Message}',
+toaster({
+    body: '{$Body}',
     className: 'border-0 bg-{$ToastMessage->ThemeColor} text-white'
 });
 JS;
