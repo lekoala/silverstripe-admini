@@ -6,7 +6,6 @@ use LeKoala\Admini\ModelAdmin;
 use LeKoala\Admini\MaterialIcons;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\State\SubsiteState;
-use SilverStripe\Subsites\Forms\GridFieldSubsiteDetailForm;
 
 /**
  * Admin interface to manage and create {@link Subsite} instances.
@@ -26,6 +25,8 @@ class SubsiteAdmin extends ModelAdmin
     public $showImportForm = false;
 
     private static $tree_class = Subsite::class;
+
+    private static $required_permission_codes = "CMS_ACCESS_SilverStripe\Subsites\Admin\SubsiteAdmin"; // inherit SS permissions
 
     public function canView($member = null)
     {

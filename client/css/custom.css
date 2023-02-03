@@ -139,3 +139,7 @@ Otherwise you don't see the disabled color
 .select2-container--bootstrap-5 .select2-selection {
     min-height: calc(1em + 0.9rem + 2px) !important;
 }
+
+.jodit-wysiwyg {
+    background: #fff;
+}
