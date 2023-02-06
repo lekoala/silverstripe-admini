@@ -22,7 +22,7 @@
 
 /* Dropup */
 
-.dropdown-menu label.btn {
+.dropdown-menu .btn {
     width: 100%;
     border: 0;
     border-radius: 0;
@@ -30,7 +30,7 @@
     background: transparent;
     color: var(--bs-primary);
 }
-.dropdown-menu label.btn:hover {
+.dropdown-menu .btn:hover {
     background: var(--bs-light);
 }
 

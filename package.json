@@ -4,7 +4,7 @@
   "author": "LeKoala",
   "license": "MIT",
   "dependencies": {
-    "admini": "git://github.com/lekoala/admini.git#e0cd72ef2167e7bdece8d6c5d5ce932601d04e8a"
+    "admini": "git://github.com/lekoala/admini.git#e8697afd2d1226325b92bc6dc04a060e3f845df4"
   },
   "scripts": {
     "build": "esbuild --bundle --minify --format=esm --sourcemap ./client/js/admini.js --outfile=./client/js/admini.min.js",
