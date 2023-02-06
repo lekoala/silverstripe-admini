@@ -67,8 +67,11 @@ trait HasSubsites
         if (!class_exists(SubsiteState::class)) {
             return;
         }
+        Requirements::block('silverstripe/subsites:client/css/LeftAndMain_Subsites.css');
         Requirements::block('silverstripe/subsites:css/LeftAndMain_Subsites.css');
+        Requirements::block('silverstripe/subsites:client/javascript/LeftAndMain_Subsites.js');
         Requirements::block('silverstripe/subsites:javascript/LeftAndMain_Subsites.js');
+        Requirements::block('silverstripe/subsites:client/javascript/VirtualPage_Subsites.js');
         Requirements::block('silverstripe/subsites:javascript/VirtualPage_Subsites.js');
     }
 }

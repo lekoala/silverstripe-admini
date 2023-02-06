@@ -11,7 +11,9 @@ class SilverStripe {
                 const val = dropdown.value;
                 var queryParams = new URLSearchParams(window.location.search);
                 queryParams.set("SubsiteID", val);
-                window.location.replace(`${window.location.pathname}?${queryParams}`);
+                window.location.replace(
+                    `${window.location.pathname}?${queryParams}`
+                );
             });
         }
     }

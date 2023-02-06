@@ -22,7 +22,6 @@ use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Security\Security;
 use SilverStripe\View\Requirements;
-use LeKoala\Tabulator\TabulatorGrid;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use LeKoala\DeferBackend\CspProvider;
@@ -450,7 +449,7 @@ HTML;
 
     /**
      * In the CMS, we use tabs in the header
-     * Do not render actual cms tabs
+     * Do not render actual tabs from the form
      *
      * @param Form $form
      * @return void
@@ -523,7 +522,10 @@ HTML;
         // SSViewer::config()->source_file_comments = true;
 
         // Lazy by default
-        Config::modify()->set(TabulatorGrid::class, "default_lazy_init", true);
+        Config::modify()->set(\LeKoala\Tabulator\TabulatorGrid::class, "default_lazy_init", true);
+
+        // Pure modal
+        Config::modify()->set(\LeKoala\PureModal\PureModal::class, "move_modal_to_body", true);
 
         // Replace classes
         $replacementServices = self::config()->replacement_services;
@@ -612,7 +614,7 @@ HTML;
     public function LinkHash($action = null): string
     {
         $request = $this->getRequest();
-        $hash = Cookie::get("hash");
+        $hash = null;
         if ($request->isPOST()) {
             $hash = $request->postVar("_hash");
         }

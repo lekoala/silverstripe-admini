@@ -1,14 +1,11 @@
 "use strict";
 
 // import * as bootstrap from "bootstrap";
-import * as bootstrap from "../../node_modules/admini/src/js/custom-bootstrap.js";
+import bootstrap from "../../node_modules/admini/src/js/custom-bootstrap.js";
 import "bs-companion/bs-companion.js";
 import AdminiUi from "../../node_modules/admini/src/js/ui.js";
 import escapeHTML from "../../node_modules/admini/src/js/utils/escape-html.js";
 import SilverStripe from "./silverstripe.js";
-
-// Make globally available
-window.bootstrap = bootstrap;
 
 let ui = new AdminiUi();
 let init = () => {
