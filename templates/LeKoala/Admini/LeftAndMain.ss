@@ -22,6 +22,7 @@
 		$Content
         </main>
     </div>
+    <input type="hidden" name="_hash" /><%-- helps tracking tabs --%>
     <script type="module">window.admini.init()</script>
 </body>
 </html>

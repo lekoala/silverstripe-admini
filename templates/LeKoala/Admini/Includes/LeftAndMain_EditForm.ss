@@ -1,6 +1,7 @@
 <% if $IncludeFormTag %>
-<form $FormAttributes>
-<input type="hidden" name="_hash" />
+<form class="main-container" $FormAttributes>
+<% else %>
+<div class="main-container">
 <% end_if %>
 
 <header class="main-header">
@@ -54,4 +55,6 @@
 
 <% if $IncludeFormTag %>
 </form>
+<% else %>
+</div>
 <% end_if %>
