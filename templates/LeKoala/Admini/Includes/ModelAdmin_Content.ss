@@ -1,7 +1,6 @@
+<div class="main-container">
 <% if $IncludeFormTag %>
 <form class="main-container" $FormAttributes>
-<% else %>
-<div class="main-container">
 <% end_if %>
 
 <header class="main-header">
@@ -41,6 +40,5 @@ $EditForm
 
 <% if $IncludeFormTag %>
 </form>
-<% else %>
-</div>
 <% end_if %>
+</div>
