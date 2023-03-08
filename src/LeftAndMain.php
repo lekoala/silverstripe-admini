@@ -227,7 +227,7 @@ class LeftAndMain extends Controller implements PermissionProvider
      * @config
      */
     private static $casting = [
-        'MainSvgIcon' => 'HTMLText'
+        'MainIcon' => 'HTMLText'
     ];
 
     /**
@@ -382,16 +382,46 @@ JS;
 
     protected function includeFavicon()
     {
-        $icon = $this->MainSvgIcon();
-        $encodedIcon = str_replace(['"', '#'], ['%22', '%23'], $icon);
-        $html = <<<HTML
-<link
-rel="icon"
-type="image/svg+xml"
-href="data:image/svg+xml,$encodedIcon"
-/>
+        $icon = $this->MainIcon();
+        if (strpos($icon, "<img") === 0) {
+            // Regular image
+            $matches = [];
+            preg_match('/src="([^"]+)"/', $icon, $matches);
+            $url = $matches[1] ?? '';
+            $html = <<<HTML
+<link rel="icon" type="image/png" href="$url" />
 HTML;
+        } else {
+            // Svg icon
+            $encodedIcon = str_replace(['"', '#'], ['%22', '%23'], $icon);
+            $html = <<<HTML
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,$encodedIcon" />
+HTML;
+        }
+
         Requirements::insertHeadTags($html, __FUNCTION__);
+    }
+
+    protected function includeThemeVariables()
+    {
+        $SiteConfig = SiteConfig::current_site_config();
+        if (!$SiteConfig->PrimaryColor) {
+            return;
+        }
+        $PrimaryColor = $SiteConfig->dbObject('PrimaryColor');
+        if (!$PrimaryColor->hasMethod('Color')) {
+            return;
+        }
+
+        $bg = $PrimaryColor->Color();
+        // Black is too harsh
+        $color = $PrimaryColor->ContrastColor('#020C11');
+        $border = $PrimaryColor->HighlightColor();
+
+        $styles = <<<CSS
+.sidebar-brand {background: $bg; color: $color}
+CSS;
+        Requirements::customCSS($styles, __FUNCTION__);
     }
 
     /**
@@ -404,9 +434,18 @@ HTML;
 
     /**
      * The icon to be used either as favicon or in the menu
+     * Can return a <svg> or <img> tag
      */
-    public function MainSvgIcon(): string
+    public function MainIcon(): string
     {
+        // Can be provided by the SiteConfig as a svg string or an uploaded png
+        $SiteConfig = SiteConfig::current_site_config();
+        if ($SiteConfig->hasMethod('SvgIcon')) {
+            return $SiteConfig->SvgIcon();
+        }
+        if ($SiteConfig->IconID) {
+            return '<img src="' . ($SiteConfig->Icon()->Link() ?? '') . '" />';
+        }
         $emoji = self::config()->svg_emoji ?? '💠';
         $icon = self::config()->svg_icon ?? '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100"><text x="50%" y="52%" dominant-baseline="central" text-anchor="middle" font-size="120">' . $emoji . '</text></svg>';
         return $icon;
@@ -578,6 +617,7 @@ HTML;
         $this->includeFavicon();
         $this->includeLastIcon();
         $this->includeGoogleFont();
+        $this->includeThemeVariables();
 
         Requirements::javascript('lekoala/silverstripe-admini: client/js/admini.min.js');
         // This must be applied last, so we put it at the bottom manually because requirements backend may inject stuff in the body
@@ -611,6 +651,13 @@ HTML;
         }
     }
 
+    /**
+     * Returns the link with the posted hash if any
+     * Depends on a _hash input in the
+     *
+     * @param string $action
+     * @return string
+     */
     public function LinkHash($action = null): string
     {
         $request = $this->getRequest();

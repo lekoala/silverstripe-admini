@@ -1,6 +1,7 @@
 <div class="main-container">
 <% if $IncludeFormTag %>
 <form class="main-container" $FormAttributes>
+    <input type="hidden" name="_hash" /><%-- helps tracking tabs --%>
 <% end_if %>
 
 <header class="main-header">
