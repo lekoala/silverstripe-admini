@@ -10,6 +10,9 @@ use SilverStripe\View\Requirements;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\State\SubsiteState;
 
+/**
+ * Allows you to have a common api regardless of Subsite module being installed
+ */
 trait HasSubsites
 {
     /**
@@ -25,6 +28,31 @@ trait HasSubsites
         return DataObject::get_by_id(Subsite::class, $id);
     }
 
+    /**
+     * Remove the need for SubsiteMenuExtension
+     *
+     * @return bool
+     */
+    public function subsiteCMSShowInMenu()
+    {
+        return true;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSubsiteId()
+    {
+        $subsite = $this->CurrentSubsite();
+        if ($subsite) {
+            return $subsite->ID;
+        }
+        return 0;
+    }
+
+    /**
+     * @return ArrayList
+     */
     public function ListSubsitesExpanded()
     {
         if (!class_exists(SubsiteState::class)) {

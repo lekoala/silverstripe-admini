@@ -10,9 +10,6 @@ LeKoala\Admini\LeftAndMain:
   extensions:
     - SilverStripe\Subsites\Extensions\LeftAndMainSubsites
     - SilverStripe\Subsites\Extensions\ControllerSubsites
-LeKoala\Admini\SecurityAdmin:
-  extensions:
-    - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
 SilverStripe\Subsites\Middleware\InitStateMiddleware:
   admin_url_paths:
     - 'admini/'
