@@ -16,6 +16,14 @@
             <% include LeKoala\\Admini\\CMSBreadcrumbs %>
         <% end_with %>
     </div>
+    <%-- cms-actions getCMSUtils entry point --%>
+    <% if $Record.getCMSUtils %>
+        <div class="main-header-utils">
+            <% loop $Record.getCMSUtils %>
+                $FieldHolder
+            <% end_loop %>
+        </div>
+    <% end_if %>
     <div class="main-header-nav<% if $Fields.hasTabset %> main-header-tabs<% end_if %>">
         <% if $Fields.hasTabset %>
             <% with $Fields.fieldByName('Root') %>
