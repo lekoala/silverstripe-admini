@@ -159,16 +159,35 @@ abstract class ModelAdmin extends LeftAndMain
      */
     protected function getTabulatorGrid(Form $form): TabulatorGrid
     {
-        $field = new TabulatorGrid(
+        $grid = new TabulatorGrid(
             $this->sanitiseClassName($this->modelTab),
             false, // false = no label, null = default label
             $this->getList(),
         );
-        $field->setForm($form);
-        $field->setPageSize(self::config()->page_length);
+        $grid->setForm($form);
+        $grid->setPageSize(self::config()->page_length);
 
-        $this->extend('updateTabulatorGrid', $field);
-        return $field;
+        $grid->wizardResponsiveCollapse(false, "hide");
+        $cols = array_keys($grid->getColumns());
+        foreach ($cols as $i => $col) {
+            if (str_contains('action_', $col)) {
+                continue;
+            }
+            // fitColumns needs a minWidth
+            $grid->updateColumn($col, [
+                'minWidth' => 100
+            ]);
+
+            if ($i === 0) {
+                $grid->updateColumn($col, [
+                    'responsive' => 0,
+                    'minWidth' => 200,
+                ]);
+            }
+        }
+
+        $this->extend('updateTabulatorGrid', $grid);
+        return $grid;
     }
 
     /**

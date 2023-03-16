@@ -1,5 +1,5 @@
 <div class="sidebar-footer">
-    <div class="dropup">
+    <div class="dropup dropend">
         <button class="btn btn-default" id="help-dropdown-btn" data-bs-toggle="dropdown">
         <l-i name="help_outline"></l-i>
         </button>
