@@ -167,6 +167,7 @@ abstract class ModelAdmin extends LeftAndMain
         $grid->setForm($form);
         $grid->setPageSize(self::config()->page_length);
 
+        $grid->setGlobalSearch(true);
         $grid->wizardResponsiveCollapse(false, "hide");
         $cols = array_keys($grid->getColumns());
         foreach ($cols as $i => $col) {

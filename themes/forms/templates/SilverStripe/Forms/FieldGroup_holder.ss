@@ -1,7 +1,7 @@
 <!-- FieldGroup_holder -->
 <div id="$HolderID" class="form-group<% if $extraClass %> $extraClass<% end_if %>">
     <% if $Title %>
-    	<label for="$ID" id="title-$ID" class="form__field-label">$Title</label>
+    	<label for="$ID" id="title-$ID" class="form__field-label">$Title.RAW</label>
     <% end_if %>
 	<div id="$ID" <% include SilverStripe/Forms/AriaAttributes %>
 		class="input-group<% if not $Title %> input-group--no-label<% end_if %><% if $Zebra %> input-group-zebra<% end_if %><% if $extraClass %> $extraClass<% end_if %>">

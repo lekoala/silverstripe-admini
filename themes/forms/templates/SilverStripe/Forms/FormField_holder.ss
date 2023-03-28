@@ -1,6 +1,6 @@
 <div id="$HolderID" class="form-group field<% if $extraClass %> $extraClass<% end_if %>">
     <% if $Title %>
-        <label for="$ID" id="title-$ID" class="form__field-label">$Title</label>
+        <label for="$ID" id="title-$ID" class="form__field-label">$Title.RAW</label>
     <% end_if %>
     <div class="form-field<% if not $Title %> form-field--no-label<% end_if %>">
         $Field

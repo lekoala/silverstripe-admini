@@ -2,8 +2,8 @@
 	<% if $Options.Count %>
     <% loop $Options %>
     <div class="checkbox form-check $Class">
-        <input id="$ID" class="checkbox form-check-input" name="$Name" type="checkbox" value="$Value"<% if $isChecked %> checked="checked"<% end_if %><% if $isDisabled %> disabled="disabled"<% end_if %> />
-        <label class="form-check-label">$Title</label>
+        <input id="$ID" class="checkbox form-check-input" name="$Name" type="checkbox" value="$Value"<% if $isChecked %> checked="checked"<% end_if %><% if $isDisabled || $Up.isReadonly %> disabled="disabled"<% end_if %> />
+        <label class="form-check-label">$Title.RAW</label>
     </div>
     <% end_loop %>
 	<% else %>
