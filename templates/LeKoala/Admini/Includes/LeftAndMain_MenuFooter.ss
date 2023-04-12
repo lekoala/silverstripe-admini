@@ -1,5 +1,8 @@
 <div class="sidebar-footer">
-    <div class="dropup dropend">
+    <button class="btn btn-default sidebar-toggle js-sidebar-toggle">
+        <l-i name="menu_open"></l-i>
+    </button>
+    <div class="dropup">
         <button class="btn btn-default" id="help-dropdown-btn" data-bs-toggle="dropdown">
         <l-i name="help_outline"></l-i>
         </button>
@@ -15,7 +18,4 @@
         </p>
         </ul>
     </div>
-    <button class="btn btn-default sidebar-toggle js-sidebar-toggle">
-        <l-i name="menu_open"></l-i>
-    </button>
 </div>

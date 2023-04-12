@@ -1025,8 +1025,11 @@ CSS;
      * @param int|DataObject $id ID or object
      * @return DataObject
      */
-    public function getRecord($id)
+    public function getRecord($id = null)
     {
+        if ($id === null) {
+            $id = $this->currentPageID();
+        }
         $className = $this->config()->get('tree_class');
         if (!$className) {
             return null;

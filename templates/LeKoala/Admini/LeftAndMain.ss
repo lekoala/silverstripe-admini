@@ -18,11 +18,12 @@
 	<div class="wrapper">
 		$Menu
         $Tools
-        <main class="main $BaseCSSClasses">
-		$Content
-        </main>
+        <sco-pe id="main-scope">
+            <main class="main $BaseCSSClasses">
+            $Content
+            </main>
+        </sco-pe>
     </div>
     <input type="hidden" name="_hash" /><%-- helps tracking tabs --%>
-    <script type="module">window.admini.init()</script>
 </body>
 </html>
