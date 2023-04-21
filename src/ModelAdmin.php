@@ -210,8 +210,17 @@ abstract class ModelAdmin extends LeftAndMain
      */
     public function getList()
     {
-        $list = DataObject::singleton($this->modelClass)->get();
+        $singl = singleton($this->modelClass);
+        $list = $singl->get();
         $this->extend('updateList', $list);
+
+        $config = $singl->config();
+
+        // Sort by custom sort order if no filter is set
+        if ($config->model_admin_sort) {
+            $list = $list->sort($config->model_admin_sort);
+        }
+
         return $list;
     }
 
