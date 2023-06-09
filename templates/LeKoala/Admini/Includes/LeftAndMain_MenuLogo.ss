@@ -1,4 +1,4 @@
-<a class="sidebar-brand" href="$BaseHref" target="_blank">
+<a class="sidebar-brand" href="$BaseHref" target="_blank" data-scope-fragment>
     <span class="sidebar-brand-icon">
         $MainIcon
     </span>
