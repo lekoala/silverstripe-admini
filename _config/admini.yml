@@ -8,19 +8,19 @@ LeKoala\Admini\LeftAndMain:
   svg_icon: null
   google_font: "family=Inter:wght@300;400;600&display=swap"
   preload_fonts: []
-  # Specify replacement => replaced class
+  # replacement triggered upon admin init to avoid side effects
   replacement_services:
-    LeKoala\Jodit\JoditEditor: SilverStripe\Forms\HTMLEditor\HTMLEditorField
-    LeKoala\FilePond\FilePondField: SilverStripe\AssetAdmin\Forms\UploadField
-    LeKoala\Admini\Forms\BootstrapTagsField: SilverStripe\Forms\ListboxField
-    LeKoala\Tabulator\TabulatorGrid: SilverStripe\Forms\GridField\GridField
----
-Name: modular-behaviour-admini
-After:
-  - "lekoala/silverstripe-modular-behaviour"
-Only:
-  moduleexists:
-    - "lekoala/silverstripe-modular-behaviour"
----
-LeKoala\ModularBehaviour\ModularFormField:
-  enable_modular_requirements: false
+    SilverStripe\Forms\HTMLEditor\HTMLEditorField:
+      class: LeKoala\FormElements\TipTapEditor
+    SilverStripe\AssetAdmin\Forms\UploadField:
+      class: LeKoala\FilePond\FilePondField
+    SilverStripe\Forms\ListboxField:
+      class: LeKoala\FormElements\BsTagsMultiField
+    SilverStripe\Forms\GridField\GridField:
+      class: LeKoala\Tabulator\TabulatorGrid
+    SilverStripe\Forms\DateField:
+      class: LeKoala\FormElements\FlatpickrField
+    SilverStripe\Forms\DatetimeField:
+      class: LeKoala\FormElements\FlatpickrField
+      calls:
+        - [setDateTimeOptions]

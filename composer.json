@@ -19,13 +19,14 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
-        "silverstripe/framework": "^4.10",
+        "php": "^8.0",
+        "silverstripe/framework": "^4.13",
         "silverstripe/assets": "^1.10",
         "silverstripe/versioned": "^1.10",
         "lekoala/silverstripe-defer-backend": "^1.2",
-        "lekoala/silverstripe-modular-behaviour": "*",
-        "lekoala/silverstripe-tabulator": "*"
+        "lekoala/silverstripe-tabulator": "*",
+        "lekoala/silverstripe-filepond": "*",
+        "lekoala/silverstripe-form-elements": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",

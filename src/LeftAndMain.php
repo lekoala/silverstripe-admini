@@ -567,20 +567,7 @@ CSS;
         Config::modify()->set(\LeKoala\PureModal\PureModal::class, "move_modal_to_body", true);
 
         // Replace classes
-        $replacementServices = self::config()->replacement_services;
-        if ($replacementServices) {
-            $replacementConfig = [];
-            foreach ($replacementServices as $replacement => $replaced) {
-                if (!class_exists($replacement)) {
-                    continue;
-                }
-                $replacementConfig[$replaced] = [
-                    'class' => $replacement
-                ];
-            }
-            Injector::inst()->load($replacementConfig);
-        }
-
+        self::replaceServices();
         DeferBackend::config()->enable_js_modules = true;
         DeferBackend::replaceBackend();
 
@@ -648,6 +635,21 @@ CSS;
             $class::set_stage($class::DRAFT);
             // Set default reading mode to suppress ?stage=Stage querystring params in CMS
             $class::set_default_reading_mode($class::get_reading_mode());
+        }
+    }
+
+    protected static function replaceServices()
+    {
+        $replacementServices = self::config()->replacement_services;
+        if ($replacementServices) {
+            $replacementConfig = [];
+            foreach ($replacementServices as $replaced => $replacement) {
+                if (!class_exists($replacement['class'])) {
+                    continue;
+                }
+                $replacementConfig[$replaced] = $replacement;
+            }
+            Injector::inst()->load($replacementConfig);
         }
     }
 
