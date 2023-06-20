@@ -4,7 +4,7 @@
             <% if Header %>
             <li class="sidebar-nav-header">$Title</li>
             <% else %>
-            <li class="sidebar-item $LinkingMode $FirstLast" id="Menu-$Code" title="$Title.ATT">
+            <li class="sidebar-item $FirstLast" id="Menu-$Code" title="$Title.ATT">
                 <a href="$Link" data-scope-hint="main-scope" class="sidebar-link <% if $LinkingMode != 'link' %>active<% end_if %>" $AttributesHTML><l-i name="$IconName"></l-i> <span>$Title</span></a>
                 <% if Badge %>
                 <span class="sidebar-badge badge bg-primary js-mobile-tooltip" data-bs-toggle="tooltip">$Badge</span>
