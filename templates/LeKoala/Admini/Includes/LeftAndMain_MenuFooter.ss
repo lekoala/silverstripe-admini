@@ -1,3 +1,4 @@
+<% cached 'menufooter' %>
 <div class="sidebar-footer" data-scope-fragment>
     <button class="btn btn-default sidebar-toggle js-sidebar-toggle">
         <l-i name="menu_open"></l-i>
@@ -19,3 +20,4 @@
         </ul>
     </div>
 </div>
+<% end_cached %>

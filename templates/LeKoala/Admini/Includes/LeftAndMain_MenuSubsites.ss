@@ -1,3 +1,4 @@
+<% cached 'menusubsites', $CurrentSubsite.ID %>
 <% if ListSubsitesExpanded %>
 <%-- Subsites --%>
 <select name="" id="sidebar-selector" class="form-select" data-scope-fragment>
@@ -6,3 +7,4 @@
 <% end_loop %>
 </select>
 <% end_if %>
+<% end_cached %>

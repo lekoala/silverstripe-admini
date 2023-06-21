@@ -24,6 +24,5 @@
             </main>
         </sco-pe>
     </div>
-    <input type="hidden" name="_hash" /><%-- helps tracking tabs --%>
 </body>
 </html>

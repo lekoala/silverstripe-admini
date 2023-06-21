@@ -517,10 +517,15 @@ CSS;
         if ($extraJs) {
             foreach ($extraJs as $file => $config) {
                 if (is_numeric($file)) {
-                    $file = $config;
+                    if (is_string($config)) {
+                        $file = $config;
+                        $config = [];
+                    } elseif (is_array($config)) {
+                        $file = $config['src'];
+                        unset($config['src']);
+                    }
                 }
-
-                Requirements::javascript($file);
+                Requirements::javascript($file, $config);
             }
         }
 
@@ -528,8 +533,13 @@ CSS;
         if ($extraCss) {
             foreach ($extraCss as $file => $config) {
                 if (is_numeric($file)) {
-                    $file = $config;
-                    $config = array();
+                    if (is_string($config)) {
+                        $file = $config;
+                        $config = [];
+                    } elseif (is_array($config)) {
+                        $file = $config['href'];
+                        unset($config['href']);
+                    }
                 }
 
                 Requirements::css($file, isset($config['media']) ? $config['media'] : null);
@@ -540,10 +550,14 @@ CSS;
         if ($extraThemedCss) {
             foreach ($extraThemedCss as $file => $config) {
                 if (is_numeric($file)) {
-                    $file = $config;
-                    $config = array();
+                    if (is_string($config)) {
+                        $file = $config;
+                        $config = [];
+                    } elseif (is_array($config)) {
+                        $file = $config['href'];
+                        unset($config['href']);
+                    }
                 }
-
                 Requirements::themedCSS($file, isset($config['media']) ? $config['media'] : null);
             }
         }
