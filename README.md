@@ -9,15 +9,18 @@
 This is an alternative admin module for SilverStripe built on top of [admini](https://github.com/lekoala/admini). It is mostly standalone and only needs the base framework to run.
 GridFields are replaced by the powerful [Tabulator implementation](https://github.com/lekoala/silverstripe-tabulator).
 
+Forms are powered by custom elements and loaded on request using [Form Elements](https://github.com/lekoala/silverstripe-form-elements).
+
+The goal is to provide a very fast, yet flexible ui. For example, a cached page load can use as little as 7 database queries.
+
 ## TODO
 
 - Dashboard
-- Fluent & Subsite support
-- Ajax navigation
+- Fluent
 
 ## Compatibility
 
-Tested with SilverStripe 4.10
+Tested with SilverStripe 4.13^
 
 Working mostly out of the box with my other modules:
 - cms-actions

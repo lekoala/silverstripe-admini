@@ -84,7 +84,7 @@ abstract class ModelAdmin extends LeftAndMain
     private static $page_length = 15;
 
     /**
-     * Initialize the model admin interface. Sets up embedded jquery libraries and requisite plugins.
+     * Initialize the model admin interface.
      *
      * Sets the `modelClass` field which determines which of the {@link DataObject} objects will have visible data. This
      * is determined by the URL (with the first slug being the name of the DataObject class to represent. If this class

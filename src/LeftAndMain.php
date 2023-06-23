@@ -773,7 +773,6 @@ CSS;
      * fact that browsers handle HTTP redirects opaquely, no intervention via JS is possible.
      * In isolation, that's not a problem - but combined with history.pushState()
      * it means we would request the same redirection URL twice if we want to update the URL as well.
-     * See LeftAndMain.js for the required jQuery ajaxComplete handlers.
      *
      * @param string $url
      * @param int $code
@@ -785,9 +784,6 @@ CSS;
         if ($this->getRequest()->isAjax()) {
             $response = $this->getResponse();
             $response->addHeader('X-ControllerURL', $url);
-            if ($this->getRequest()->getHeader('X-Pjax') && !$response->getHeader('X-Pjax')) {
-                $response->addHeader('X-Pjax', $this->getRequest()->getHeader('X-Pjax'));
-            }
             $newResponse = new HTTPResponse(
                 $response->getBody(),
                 $response->getStatusCode(),
