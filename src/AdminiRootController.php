@@ -44,6 +44,36 @@ class AdminiRootController extends Controller implements TemplateGlobalProvider
     }
 
     /**
+     * Useful when used alongside regular admin
+     *
+     * @return string
+     */
+    public static function get_current_admin_route()
+    {
+        $route = self::get_admin_route();
+        if (Controller::has_curr()) {
+            $curr = Controller::curr();
+            $request = $curr->getRequest()->getURL();
+            $firstSegment = explode("/", $request)[0] ?? null;
+
+            // Force route to admin if it's the current segment
+            if ($firstSegment == "admin") {
+                $route = $firstSegment;
+            }
+        }
+        return $route;
+    }
+
+    public static function force_redirect($segment, $fallbackRoute = null)
+    {
+        if ($fallbackRoute === null) {
+            $fallbackRoute = self::get_current_admin_route();
+        }
+        header('Location: ' . $fallbackRoute . '/' . $segment);
+        exit();
+    }
+
+    /**
      * @var string
      * @config
      * The LeftAndMain child that will be used as the initial panel to display if none is selected (i.e. if you
