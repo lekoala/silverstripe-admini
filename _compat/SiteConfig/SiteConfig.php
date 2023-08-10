@@ -23,7 +23,8 @@ use SilverStripe\Security\Security;
 use SilverStripe\View\TemplateGlobalProvider;
 
 /**
- * SiteConfig
+ * SiteConfig compatibility class
+ * Copy paste this class into your app if you are not using the regular SiteConfig module
  *
  * @property string Title Title of the website.
  * @property string Tagline Tagline of the website.

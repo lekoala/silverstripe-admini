@@ -2,10 +2,11 @@
 
 namespace LeKoala\Admini;
 
-use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
-use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\View\TemplateGlobalProvider;
 
@@ -133,7 +134,7 @@ class AdminiRootController extends Controller implements TemplateGlobalProvider
         }
     }
 
-    public function handleRequest(HTTPRequest $request)
+    public function handleRequest(HTTPRequest $request): HTTPResponse
     {
         // If this is the final portion of the request (i.e. the URL is just /admin), direct to the default panel
         if ($request->allParsed()) {

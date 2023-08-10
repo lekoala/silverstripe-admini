@@ -737,7 +737,7 @@ CSS;
         return Security::permissionFailure($this, $messageSet);
     }
 
-    public function handleRequest(HTTPRequest $request)
+    public function handleRequest(HTTPRequest $request): HTTPResponse
     {
         try {
             $response = parent::handleRequest($request);
@@ -776,9 +776,9 @@ CSS;
      *
      * @param string $url
      * @param int $code
-     * @return HTTPResponse|string
+     * @return HTTPResponse
      */
-    public function redirect($url, $code = 302)
+    public function redirect($url, $code = 302): HTTPResponse
     {
         //TODO: check this when implementing ajax navigation
         if ($this->getRequest()->isAjax()) {
@@ -792,11 +792,11 @@ CSS;
             foreach ($response->getHeaders() as $k => $v) {
                 $newResponse->addHeader($k, $v);
             }
-
+            foreach ($response->getHeaders() as $k => $v) {
+                $newResponse->addHeader($k, $v);
+            }
             // $newResponse->setIsFinished(true);
-            // $this->setResponse($newResponse);
-
-            return ''; // Actual response will be re-requested by client
+            $this->setResponse($newResponse);
         } else {
             return parent::redirect($url, $code);
         }

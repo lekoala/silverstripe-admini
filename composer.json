@@ -19,10 +19,10 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "silverstripe/framework": "^4.13",
-        "silverstripe/assets": "^1.10",
-        "silverstripe/versioned": "^1.10",
+        "php": "^8",
+        "silverstripe/framework": "^4.13 || ^5",
+        "silverstripe/assets": "^1.10 || ^2",
+        "silverstripe/versioned": "^1.10 || ^2",
         "lekoala/silverstripe-defer-backend": "^1.2",
         "lekoala/silverstripe-tabulator": "*",
         "lekoala/silverstripe-filepond": "*",
