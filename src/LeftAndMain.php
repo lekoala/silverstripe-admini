@@ -797,6 +797,7 @@ CSS;
             }
             // $newResponse->setIsFinished(true);
             $this->setResponse($newResponse);
+            return $newResponse;
         } else {
             return parent::redirect($url, $code);
         }
