@@ -289,7 +289,7 @@ abstract class ModelAdmin extends LeftAndMain
         if (is_string($models)) {
             $models = array($models);
         }
-        if (!count($models)) {
+        if (!$models || !count($models)) {
             throw new \RuntimeException(
                 'ModelAdmin::getManagedModels():
 				You need to specify at least one DataObject subclass in private static $managed_models.

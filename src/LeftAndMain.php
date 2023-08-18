@@ -628,11 +628,8 @@ CSS;
 
         //TODO: restore these features
         // Requirements::add_i18n_javascript('silverstripe/admin:client/lang');
+        //TODO: replace moment by a modern alternative
         // Requirements::add_i18n_javascript('silverstripe/admin:client/dist/moment-locales', false, false, true);
-
-        // if (LeftAndMain::config()->uninherited('session_keepalive_ping')) {
-        //     Requirements::javascript('silverstripe/admin: client/dist/js/LeftAndMain.Ping.js');
-        // }
 
         $this->loadExtraRequirements();
         $this->extend('init');

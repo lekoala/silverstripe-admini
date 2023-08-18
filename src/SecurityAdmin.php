@@ -17,18 +17,26 @@ use SilverStripe\Security\PermissionProvider;
 /**
  * Security section of the CMS
  */
-class SecurityAdmin extends LeftAndMain implements PermissionProvider
+class SecurityAdmin extends ModelAdmin implements PermissionProvider
 {
-
     private static $url_segment = 'security';
-
-    private static $url_rule = '/$Action/$ID/$OtherID';
 
     private static $menu_title = 'Security';
 
-    private static $tree_class = Group::class;
-
-    private static $subitem_class = Member::class;
+    private static $managed_models = [
+        'users' => [
+            'title' => 'Users',
+            'dataClass' => Member::class
+        ],
+        'groups' => [
+            'title' => 'Groups',
+            'dataClass' => Group::class
+        ],
+        // 'roles' => [
+        //     'title' => 'Roles',
+        //     'dataClass' => PermissionRole::class
+        // ],
+    ];
 
     private static $required_permission_codes = 'CMS_ACCESS_SecurityAdmin';
 
