@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <div class="breadcrumb">
         <% loop $Breadcrumbs %>
-            <% if $Last %>
+            <% if $IsLast %>
             <li class="breadcrumb-break"></li>
             <li class="breadcrumb-item active" aria-current="page">$Title<% if $Extra %>$Extra<% end_if %></li>
             <% else %>
