@@ -5,13 +5,24 @@ namespace LeKoala\Admini;
 use SilverStripe\ORM\DB;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\TabSet;
+use SilverStripe\ORM\ArrayList;
+use LeKoala\Base\View\Bootstrap;
 use SilverStripe\Security\Group;
 use SilverStripe\View\ArrayData;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
+use SilverStripe\Control\Director;
+use SilverStripe\Forms\HeaderField;
+use SilverStripe\Security\Security;
 use LeKoala\Tabulator\TabulatorGrid;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Security\Permission;
+use LeKoala\Admini\Helpers\FileHelper;
+use SilverStripe\Security\LoginAttempt;
 use SilverStripe\Security\PermissionRole;
+use LeKoala\CmsActions\CmsInlineFormAction;
+use LeKoala\Admini\Forms\BootstrapAlertField;
 use SilverStripe\Security\PermissionProvider;
 
 /**
@@ -43,99 +54,204 @@ class SecurityAdmin extends ModelAdmin implements PermissionProvider
     private static $menu_icon = MaterialIcons::SECURITY;
 
     private static $allowed_actions = [
-        'EditForm',
+        'doClearLogs',
+        'doRotateLogs',
+        // new tabs
+        'security_audit',
+        'logs',
     ];
 
-
-    /**
-     * @return array
-     */
-    public static function getMembersFromSecurityGroupsIDs()
+    public static function getMembersFromSecurityGroupsIDs(): array
     {
         $sql = 'SELECT DISTINCT MemberID FROM Group_Members INNER JOIN Permission ON Permission.GroupID = Group_Members.GroupID WHERE Code LIKE \'CMS_%\' OR Code = \'ADMIN\'';
         return DB::query($sql)->column();
     }
 
-    public function getEditForm($id = null, $fields = null)
+    /**
+     * @param array $extraIDs
+     * @return Member[]|ArrayList
+     */
+    public static function getMembersFromSecurityGroups(array $extraIDs = [])
     {
-        $fields = new FieldList();
-        $fields->push(new TabSet('Root'));
+        $ids = array_merge(self::getMembersFromSecurityGroupsIDs(), $extraIDs);
+        return Member::get()->filter('ID', $ids);
+    }
 
-        // Build member fields (display only relevant security members)
-        $membersOfGroups = self::getMembersFromSecurityGroupsIDs();
-        $memberField = new TabulatorGrid(
-            'Members',
-            false,
-            Member::get()->filter("ID", $membersOfGroups),
-        );
-        $membersTab = $fields->findOrMakeTab('Root.Users', _t(__CLASS__ . '.TABUSERS', 'Users'));
-        $membersTab->push($memberField);
+    public function getManagedModels()
+    {
+        $models = parent::getManagedModels();
 
-        // Build group fields
-        $groupField = new TabulatorGrid(
-            'Groups',
-            false,
-            Group::get(),
-        );
-        $groupsTab = $fields->findOrMakeTab('Root.Groups', Group::singleton()->i18n_plural_name());
-        $groupsTab->push($groupField);
-
-        // Add roles editing interface
-        $rolesTab = null;
-        if (Permission::check('APPLY_ROLES')) {
-            $rolesField = new TabulatorGrid('Roles', false, PermissionRole::get());
-            $rolesTab = $fields->findOrMakeTab('Root.Roles', PermissionRole::singleton()->i18n_plural_name());
-            $rolesTab->push($rolesField);
+        // Add extra tabs
+        if (Security::config()->login_recording) {
+            $models['security_audit'] = [
+                'title' => 'Security Audit',
+                'dataClass' => LoginAttempt::class,
+            ];
+        }
+        if (Permission::check('ADMIN')) {
+            $models['logs'] = [
+                'title' => 'Logs',
+                'dataClass' => LoginAttempt::class, // mock class
+            ];
         }
 
-        // Build replacement form
-        $form = Form::create(
-            $this,
-            'EditForm',
-            $fields,
-            new FieldList()
-        )->setHTMLID('Form_EditForm');
-        $form->setTemplate($this->getTemplatesWithSuffix('_EditForm'));
-        $this->setCMSTabset($form);
+        return $models;
+    }
 
-        $this->extend('updateEditForm', $form);
+    public function getEditForm($id = null, $fields = null)
+    {
+        $form = parent::getEditForm($id, $fields);
+
+        // In security, we only show group members + current item (to avoid issue when creating stuff)
+        $request = $this->getRequest();
+        $dirParts = explode('/', $request->remaining());
+        $currentID = isset($dirParts[3]) ? [$dirParts[3]] : [];
+
+        switch ($this->modelTab) {
+            case 'users':
+                /** @var TabulatorGrid $members */
+                $members = $form->Fields()->dataFieldByName('users');
+                $membersOfGroups = self::getMembersFromSecurityGroups($currentID);
+                $members->setList($membersOfGroups);
+
+                // Add some security wise fields
+                $sng = singleton($members->getModelClass());
+                if ($sng->hasMethod('DirectGroupsList')) {
+                    $members->addDisplayFields([
+                        'DirectGroupsList' => 'Direct Groups'
+                    ]);
+                }
+                if ($sng->hasMethod('Is2FaConfigured')) {
+                    $members->addDisplayFields([
+                        'Is2FaConfigured' => '2FA'
+                    ]);
+                }
+                break;
+            case 'groups':
+                break;
+            case 'security_audit':
+                if (Security::config()->login_recording) {
+                    $this->addAuditTab($form);
+                }
+                break;
+            case 'logs':
+                if (Permission::check('ADMIN')) {
+                    $this->addLogTab($form);
+                }
+                break;
+        }
 
         return $form;
     }
 
-    public function Breadcrumbs($unlinked = false)
+    protected function getLogFiles(): array
     {
-        $crumbs = parent::Breadcrumbs($unlinked);
+        $logDir = Director::baseFolder();
+        $logFiles = glob($logDir . '/*.log');
+        return $logFiles;
+    }
 
-        // Name root breadcrumb based on which record is edited,
-        // which can only be determined by looking for the fieldname of the GridField.
-        // Note: Titles should be same titles as tabs in RootForm().
-        $params = $this->getRequest()->allParams();
-        if (isset($params['FieldName'])) {
-            // TODO FieldName param gets overwritten by nested GridFields,
-            // so shows "Members" rather than "Groups" for the following URL:
-            // admin/security/EditForm/field/Groups/item/2/ItemEditForm/field/Members/item/1/edit
-            $firstCrumb = $crumbs->shift();
-            if ($params['FieldName'] == 'Groups') {
-                $crumbs->unshift(new ArrayData(array(
-                    'Title' => Group::singleton()->i18n_plural_name(),
-                    'Link' => $this->Link() . '#Root_Groups'
-                )));
-            } elseif ($params['FieldName'] == 'Users') {
-                $crumbs->unshift(new ArrayData(array(
-                    'Title' => _t(__CLASS__ . '.TABUSERS', 'Users'),
-                    'Link' => $this->Link() . '#Root_Users'
-                )));
-            } elseif ($params['FieldName'] == 'Roles') {
-                $crumbs->unshift(new ArrayData(array(
-                    'Title' => PermissionRole::singleton()->i18n_plural_name(),
-                    'Link' => $this->Link() . '#Root_Roles'
-                )));
-            }
-            $crumbs->unshift($firstCrumb);
+    protected function addLogTab(Form $form)
+    {
+        $logFiles = $this->getLogFiles();
+        $logTab = $form->Fields();
+        $logTab->removeByName('logs');
+
+        foreach ($logFiles as $logFile) {
+            $logName = pathinfo($logFile, PATHINFO_FILENAME);
+
+            $logTab->push(new HeaderField($logName, ucwords($logName)));
+
+            $filemtime = filemtime($logFile);
+            $filesize = filesize($logFile);
+
+            $logTab->push(new BootstrapAlertField($logName . 'Alert', _t('BaseSecurityAdminExtension.LogAlert', "Last updated on {updated}", [
+                'updated' => date('Y-m-d H:i:s', $filemtime),
+            ])));
+
+            $lastLines = '<pre>' . FileHelper::tail($logFile, 10) . '</pre>';
+
+            $logTab->push(new LiteralField($logName, $lastLines));
+            $logTab->push(new LiteralField($logName . 'Size', '<p>' . _t('BaseSecurityAdminExtension.LogSize', "Total size is {size}", [
+                'size' => FileHelper::humanFilesize($filesize)
+            ]) . '</p>'));
         }
 
-        return $crumbs;
+        $clearLogsBtn = new CmsInlineFormAction('doClearLogs', _t('BaseSecurityAdminExtension.doClearLogs', 'Clear Logs'));
+        $logTab->push($clearLogsBtn);
+        $rotateLogsBtn = new CmsInlineFormAction('doRotateLogs', _t('BaseSecurityAdminExtension.doRotateLogs', 'Rotate Logs'));
+        $logTab->push($rotateLogsBtn);
+    }
+
+    public function doClearLogs(HTTPRequest $request)
+    {
+        foreach ($this->getLogFiles() as $logFile) {
+            unlink($logFile);
+        }
+        $msg = "Logs cleared";
+        return $this->redirectWithStatus($msg);
+    }
+
+    public function doRotateLogs(HTTPRequest $request)
+    {
+        foreach ($this->getLogFiles() as $logFile) {
+            if (strpos($logFile, '-') !== false) {
+                continue;
+            }
+            $newname = dirname($logFile) . '/' . pathinfo($logFile, PATHINFO_FILENAME) . '-' . date('Ymd') . '.log';
+            rename($logFile, $newname);
+        }
+        $msg = "Logs rotated";
+        return $this->redirectWithStatus($msg);
+    }
+
+    protected function addAuditTab(Form $form)
+    {
+        $auditTab = $form->Fields();
+        $auditTab->removeByName('security_audit');
+
+        $Member_SNG = Member::singleton();
+        $membersLocked = Member::get()->where('LockedOutUntil > NOW()');
+        if ($membersLocked->count()) {
+            $membersLockedGrid = new TabulatorGrid('MembersLocked', _t('BaseSecurityAdminExtension.LockedMembers', "Locked Members"), $membersLocked);
+            $membersLockedGrid->setForm($form);
+            $membersLockedGrid->setDisplayFields([
+                'Title' => $Member_SNG->fieldLabel('Title'),
+                'Email' => $Member_SNG->fieldLabel('Email'),
+                'LockedOutUntil' => $Member_SNG->fieldLabel('LockedOutUntil'),
+                'FailedLoginCount' => $Member_SNG->fieldLabel('FailedLoginCount'),
+            ]);
+            $auditTab->push($membersLockedGrid);
+        }
+
+        $LoginAttempt_SNG = LoginAttempt::singleton();
+
+        $getMembersFromSecurityGroupsIDs = self::getMembersFromSecurityGroupsIDs();
+        $recentAdminLogins = LoginAttempt::get()->filter([
+            'Status' => 'Success',
+            'MemberID' => $getMembersFromSecurityGroupsIDs
+        ])->limit(10)->sort('Created DESC');
+        $recentAdminLoginsGrid = new TabulatorGrid('RecentAdminLogins', _t('BaseSecurityAdminExtension.RecentAdminLogins', "Recent Admin Logins"), $recentAdminLogins);
+        $recentAdminLoginsGrid->setDisplayFields([
+            'Created' => $LoginAttempt_SNG->fieldLabel('Created'),
+            'IP' => $LoginAttempt_SNG->fieldLabel('IP'),
+            'Member.Title' => $Member_SNG->fieldLabel('Title'),
+            'Member.Email' => $Member_SNG->fieldLabel('Email'),
+        ]);
+        $recentAdminLoginsGrid->setForm($form);
+        $auditTab->push($recentAdminLoginsGrid);
+
+        $recentPasswordFailures = LoginAttempt::get()->filter('Status', 'Failure')->limit(10)->sort('Created DESC');
+        $recentPasswordFailuresGrid = new TabulatorGrid('RecentPasswordFailures', _t('BaseSecurityAdminExtension.RecentPasswordFailures', "Recent Password Failures"), $recentPasswordFailures);
+        $recentPasswordFailuresGrid->setDisplayFields([
+            'Created' => $LoginAttempt_SNG->fieldLabel('Created'),
+            'IP' => $LoginAttempt_SNG->fieldLabel('IP'),
+            'Member.Title' => $Member_SNG->fieldLabel('Title'),
+            'Member.Email' => $Member_SNG->fieldLabel('Email'),
+            'Member.FailedLoginCount' => $Member_SNG->fieldLabel('FailedLoginCount'),
+        ]);
+        $recentPasswordFailuresGrid->setForm($form);
+        $auditTab->push($recentPasswordFailuresGrid);
     }
 
     public function providePermissions()

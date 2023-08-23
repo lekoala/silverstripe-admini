@@ -3,6 +3,7 @@
 namespace LeKoala\Admini;
 
 use SilverStripe\Forms\Form;
+use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\View\ArrayData;
@@ -135,7 +136,7 @@ abstract class ModelAdmin extends LeftAndMain
     /**
      * @param int|null $id
      * @param \SilverStripe\Forms\FieldList $fields
-     * @return \SilverStripe\Forms\Form A Form object with one tab per {@link \SilverStripe\Forms\GridField\GridField}
+     * @return \SilverStripe\Forms\Form A Form object with one tab per grid
      */
     public function getEditForm($id = null, $fields = null)
     {
@@ -171,7 +172,10 @@ abstract class ModelAdmin extends LeftAndMain
         $grid->wizardResponsiveCollapse(false, "hide");
         $cols = array_keys($grid->getColumns());
         foreach ($cols as $i => $col) {
-            if (str_contains('action_', $col)) {
+            if (str_contains($col, 'action_')) {
+                continue;
+            }
+            if (str_contains($col, 'ui_')) {
                 continue;
             }
             // fitColumns needs a minWidth
@@ -211,7 +215,8 @@ abstract class ModelAdmin extends LeftAndMain
     public function getList()
     {
         $singl = singleton($this->modelClass);
-        $list = $singl->get();
+        /** @var DataList $list */
+        $list = $singl::get();
         $this->extend('updateList', $list);
 
         $config = $singl->config();

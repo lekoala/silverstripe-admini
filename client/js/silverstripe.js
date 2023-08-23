@@ -75,7 +75,6 @@ class SilverStripe {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
-                body: postData,
             }).then((response) => {
                 onSessionLost(response);
             });

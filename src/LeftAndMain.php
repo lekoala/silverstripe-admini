@@ -606,8 +606,7 @@ CSS;
 
         // Don't continue if there's already been a redirection request.
         if ($this->redirectedTo()) {
-            //TODO: check why we return nothing?
-            return;
+            return $this->getResponse();
         }
 
         // Audit logging hook
@@ -748,10 +747,6 @@ CSS;
 
         $title = $this->Title();
 
-        //TODO: check this when implementing ajax
-        if (!$response->getHeader('X-Controller')) {
-            $response->addHeader('X-Controller', static::class);
-        }
         if (!$response->getHeader('X-Title')) {
             $response->addHeader('X-Title', urlencode($title));
         }
@@ -777,27 +772,32 @@ CSS;
      */
     public function redirect($url, $code = 302): HTTPResponse
     {
-        //TODO: check this when implementing ajax navigation
+        $response = parent::redirect($url, $code);
         if ($this->getRequest()->isAjax()) {
-            $response = $this->getResponse();
-            $response->addHeader('X-ControllerURL', $url);
-            $newResponse = new HTTPResponse(
-                $response->getBody(),
-                $response->getStatusCode(),
-                $response->getStatusDescription()
-            );
-            foreach ($response->getHeaders() as $k => $v) {
-                $newResponse->addHeader($k, $v);
-            }
-            foreach ($response->getHeaders() as $k => $v) {
-                $newResponse->addHeader($k, $v);
-            }
-            // $newResponse->setIsFinished(true);
+            return $this->redirectForAjax($response);
+        }
+        return $response;
+    }
+
+    public function redirectForAjax(HTTPResponse $response): HTTPResponse
+    {
+        if ($this->getRequest()->isAjax() && $response->getHeader('Location')) {
+            $newResponse = LeftAndMain_HTTPResponse::cloneFrom($response);
+            $newResponse->setStatusCode(200);
+            $newResponse->removeHeader('Location');
+            $newResponse->addHeader('X-Location', $response->getHeader('Location'));
+            $newResponse->setIsFinished(true);
             $this->setResponse($newResponse);
             return $newResponse;
-        } else {
-            return parent::redirect($url, $code);
         }
+        return $response;
+    }
+
+    public function redirectWithStatus($msg): HTTPResponse
+    {
+        $response = $this->redirectBack();
+        $response->addHeader('X-Status', rawurlencode($msg));
+        return $response;
     }
 
     /**
