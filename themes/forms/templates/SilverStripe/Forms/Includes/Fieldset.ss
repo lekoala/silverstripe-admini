@@ -1,7 +1,7 @@
 <% if $Message %>
-<p id="{$FormName}_error" class="alert $AlertType">$Message</p>
+<p id="{$FormName}_error" class="alert $BootstrapAlertType">$Message</p>
 <% else %>
-<p id="{$FormName}_error" class="alert $AlertType" style="display: none"></p>
+<p id="{$FormName}_error" class="alert $BootstrapAlertType" style="display: none"></p>
 <% end_if %>
 
 <fieldset>

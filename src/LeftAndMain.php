@@ -773,10 +773,7 @@ CSS;
     public function redirect($url, $code = 302): HTTPResponse
     {
         $response = parent::redirect($url, $code);
-        if ($this->getRequest()->isAjax()) {
-            return $this->redirectForAjax($response);
-        }
-        return $response;
+        return $this->redirectForAjax($response);
     }
 
     public function redirectForAjax(HTTPResponse $response): HTTPResponse

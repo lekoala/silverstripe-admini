@@ -6,6 +6,7 @@ use Exception;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\HTTPResponse;
 use SilverStripe\ORM\ValidationResult;
 
 /**
@@ -17,6 +18,11 @@ trait Toasts
      * @return HTTPRequest
      */
     abstract public function getRequest();
+
+    /**
+     * @return HTTPResponse
+     */
+    abstract public function getResponse();
 
     /**
      * Set a message to the session, for display next time a page is shown.
@@ -42,12 +48,17 @@ trait Toasts
                 $color = "warning";
                 break;
         }
-        $this->getRequest()->getSession()->set('ToastMessage', [
-            'Message' => $message,
-            'Type' => $type,
-            'ThemeColor' => $color,
-            'Cast' => $cast,
-        ]);
+
+        if ($this->getRequest()->isAjax()) {
+            $this->getResponse()->addHeader('X-Status', $message . '|' . $type);
+        } else {
+            $this->getRequest()->getSession()->set('ToastMessage', [
+                'Message' => $message,
+                'Type' => $type,
+                'ThemeColor' => $color,
+                'Cast' => $cast,
+            ]);
+        }
     }
 
     /**
