@@ -15,13 +15,12 @@
     data-frameworkpath="$ModulePath(silverstripe/framework)"
     data-member-tempid="$CurrentMember.TempIDHash.ATT">
     <%-- include LeKoala\Admini\ToastMessages --%>
+    <%-- only include full templates so that they can get partially rendered through ajax --%>
 	<div class="wrapper">
-		$Menu
+        <sco-pe id="sidebar-scope">$Menu</sco-pe>
         $Tools
-        <sco-pe id="main-scope">
-            <main class="main $BaseCSSClasses">
-            $Content
-            </main>
+        <sco-pe id="main-scope" class="main $BaseCSSClasses">
+        $Content
         </sco-pe>
     </div>
 </body>

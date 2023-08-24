@@ -165,21 +165,21 @@ class SecurityAdmin extends ModelAdmin implements PermissionProvider
             $filemtime = filemtime($logFile);
             $filesize = filesize($logFile);
 
-            $logTab->push(new BootstrapAlertField($logName . 'Alert', _t('BaseSecurityAdminExtension.LogAlert', "Last updated on {updated}", [
+            $logTab->push(new BootstrapAlertField($logName . 'Alert', _t('SecurityAdmin.LogAlert', "Last updated on {updated}", [
                 'updated' => date('Y-m-d H:i:s', $filemtime),
             ])));
 
             $lastLines = '<pre>' . FileHelper::tail($logFile, 10) . '</pre>';
 
             $logTab->push(new LiteralField($logName, $lastLines));
-            $logTab->push(new LiteralField($logName . 'Size', '<p>' . _t('BaseSecurityAdminExtension.LogSize', "Total size is {size}", [
+            $logTab->push(new LiteralField($logName . 'Size', '<p>' . _t('SecurityAdmin.LogSize', "Total size is {size}", [
                 'size' => FileHelper::humanFilesize($filesize)
             ]) . '</p>'));
         }
 
-        $clearLogsBtn = new CmsInlineFormAction('doClearLogs', _t('BaseSecurityAdminExtension.doClearLogs', 'Clear Logs'));
+        $clearLogsBtn = new CmsInlineFormAction('doClearLogs', _t('SecurityAdmin.doClearLogs', 'Clear Logs'));
         $logTab->push($clearLogsBtn);
-        $rotateLogsBtn = new CmsInlineFormAction('doRotateLogs', _t('BaseSecurityAdminExtension.doRotateLogs', 'Rotate Logs'));
+        $rotateLogsBtn = new CmsInlineFormAction('doRotateLogs', _t('SecurityAdmin.doRotateLogs', 'Rotate Logs'));
         $logTab->push($rotateLogsBtn);
     }
 
@@ -213,7 +213,7 @@ class SecurityAdmin extends ModelAdmin implements PermissionProvider
         $Member_SNG = Member::singleton();
         $membersLocked = Member::get()->where('LockedOutUntil > NOW()');
         if ($membersLocked->count()) {
-            $membersLockedGrid = new TabulatorGrid('MembersLocked', _t('BaseSecurityAdminExtension.LockedMembers', "Locked Members"), $membersLocked);
+            $membersLockedGrid = new TabulatorGrid('MembersLocked', _t('SecurityAdmin.LockedMembers', "Locked Members"), $membersLocked);
             $membersLockedGrid->setForm($form);
             $membersLockedGrid->setDisplayFields([
                 'Title' => $Member_SNG->fieldLabel('Title'),
@@ -231,18 +231,19 @@ class SecurityAdmin extends ModelAdmin implements PermissionProvider
             'Status' => 'Success',
             'MemberID' => $getMembersFromSecurityGroupsIDs
         ])->limit(10)->sort('Created DESC');
-        $recentAdminLoginsGrid = new TabulatorGrid('RecentAdminLogins', _t('BaseSecurityAdminExtension.RecentAdminLogins', "Recent Admin Logins"), $recentAdminLogins);
+        $recentAdminLoginsGrid = new TabulatorGrid('RecentAdminLogins', _t('SecurityAdmin.RecentAdminLogins', "Recent Admin Logins"), $recentAdminLogins);
         $recentAdminLoginsGrid->setDisplayFields([
             'Created' => $LoginAttempt_SNG->fieldLabel('Created'),
             'IP' => $LoginAttempt_SNG->fieldLabel('IP'),
             'Member.Title' => $Member_SNG->fieldLabel('Title'),
             'Member.Email' => $Member_SNG->fieldLabel('Email'),
         ]);
+        $recentAdminLoginsGrid->setViewOnly();
         $recentAdminLoginsGrid->setForm($form);
         $auditTab->push($recentAdminLoginsGrid);
 
         $recentPasswordFailures = LoginAttempt::get()->filter('Status', 'Failure')->limit(10)->sort('Created DESC');
-        $recentPasswordFailuresGrid = new TabulatorGrid('RecentPasswordFailures', _t('BaseSecurityAdminExtension.RecentPasswordFailures', "Recent Password Failures"), $recentPasswordFailures);
+        $recentPasswordFailuresGrid = new TabulatorGrid('RecentPasswordFailures', _t('SecurityAdmin.RecentPasswordFailures', "Recent Password Failures"), $recentPasswordFailures);
         $recentPasswordFailuresGrid->setDisplayFields([
             'Created' => $LoginAttempt_SNG->fieldLabel('Created'),
             'IP' => $LoginAttempt_SNG->fieldLabel('IP'),
@@ -250,6 +251,7 @@ class SecurityAdmin extends ModelAdmin implements PermissionProvider
             'Member.Email' => $Member_SNG->fieldLabel('Email'),
             'Member.FailedLoginCount' => $Member_SNG->fieldLabel('FailedLoginCount'),
         ]);
+        $recentPasswordFailuresGrid->setViewOnly();
         $recentPasswordFailuresGrid->setForm($form);
         $auditTab->push($recentPasswordFailuresGrid);
     }

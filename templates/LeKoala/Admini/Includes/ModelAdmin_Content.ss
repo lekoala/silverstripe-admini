@@ -1,3 +1,4 @@
+<!-- ModelAdmin_Content -->
 <div class="main-container">
 <% if $IncludeFormTag %>
 <form class="main-container" $FormAttributes>
@@ -35,7 +36,6 @@
         </bs-tabs>
     </div>
 </header>
-
 
 $EditForm
 
