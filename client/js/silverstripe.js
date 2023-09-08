@@ -1,3 +1,7 @@
+import initialize from "../../node_modules/admini/src/js/utils/initialize.js";
+
+let pingIntervalSeconds = 0;
+
 class SilverStripe {
     static init() {
         this.attachShowOnClick();
@@ -6,8 +10,7 @@ class SilverStripe {
     }
 
     static subsiteSelector() {
-        const dropdown = document.querySelector("#sidebar-selector");
-        if (dropdown) {
+        initialize("#sidebar-selector", (dropdown) => {
             dropdown.addEventListener("change", (ev) => {
                 const val = dropdown.value;
                 var queryParams = new URLSearchParams(window.location.search);
@@ -16,11 +19,11 @@ class SilverStripe {
                     `${window.location.pathname}?${queryParams}`
                 );
             });
-        }
+        });
     }
 
     static attachShowOnClick() {
-        document.querySelectorAll(".showOnClick > a").forEach((a) => {
+        initialize(".showOnClick > a", (a) => {
             a.addEventListener("click", (e) => {
                 e.preventDefault();
                 const hidden = a.parentElement.querySelector(".d-none");
@@ -38,7 +41,11 @@ class SilverStripe {
     }
 
     static ping() {
-        const pingIntervalSeconds = 5 * 60;
+        // Already configured
+        if (pingIntervalSeconds > 0) {
+            return;
+        }
+        pingIntervalSeconds = 5 * 60;
 
         let interval = null;
         var loginPopup = null;
