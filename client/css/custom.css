@@ -10,11 +10,13 @@
 .checkboxsetfieldpermissioncheckboxsetfield_readonly input.checkbox {
     margin-right: 0.5rem;
 }
+
 .checkboxsetfieldpermissioncheckboxsetfield_readonly h5,
 .checkboxsetfieldpermissioncheckboxset h5 {
     font-size: 1.2em;
     margin-top: 1rem;
 }
+
 .checkboxsetfieldpermissioncheckboxsetfield_readonly li:first-child h5,
 .checkboxsetfieldpermissioncheckboxset li:first-child h5 {
     margin-top: 0;
@@ -30,8 +32,70 @@
     background: transparent;
     color: var(--bs-primary);
 }
+
 .dropdown-menu .btn:hover {
     background: var(--bs-light);
+}
+
+/* Actions menu */
+
+.action-menus {
+    position: relative;
+}
+
+.action-menus .nav-tabs {
+    border: 0;
+}
+
+.action-menus .nav-tabs .nav-link {
+    background: none;
+    border: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--bs-border-radius);
+
+    /* Accomodate for larger icon (24px > 16px) */
+    padding-top: 0;
+    padding-bottom: 0;
+    min-height: 34px;
+}
+
+.action-menus .nav-tabs .nav-link:hover,
+.action-menus .nav-tabs .nav-link:focus {
+    background: var(--bs-light);
+}
+
+.action-menus .tab-content .tab-pane {
+    position: absolute;
+    bottom: 38px;
+    left: 0;
+    background: #fff;
+    min-width: 200px;
+    border: 1px solid var(--bs-light);
+    z-index: 9999;
+}
+
+.action-menus .tab-content .tab-pane {
+    display: none;
+}
+
+.action-menus .tab-content .tab-pane.active {
+    display: block;
+}
+
+.action-menus .tab-content .tab-pane .action {
+    width: 100%;
+}
+
+.action-menus .tab-content .tab-pane .action:not(:first-child) {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+
+.action-menus .tab-content .tab-pane .action:not(:last-child) {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 /* HR */
@@ -46,6 +110,7 @@ hr {
 .fill-width {
     display: flex;
 }
+
 .fill-height {
     height: 100%;
     min-height: 0;
@@ -68,6 +133,7 @@ hr {
     -webkit-align-items: center;
     align-items: center;
 }
+
 .toolbar,
 .toolbar--content,
 .toolbar--north,
@@ -79,6 +145,7 @@ hr {
     margin-left: auto;
     min-height: 53px;
 }
+
 .toolbar--south {
     height: 53px;
     padding-top: 0.76925rem;
@@ -87,6 +154,7 @@ hr {
     width: 100%;
     background-color: #fafbfc;
 }
+
 .toolbar,
 .toolbar--content,
 .toolbar--north,
@@ -98,26 +166,32 @@ hr {
     margin-left: auto;
     min-height: 53px;
 }
+
 .panel {
     overflow-x: auto;
 }
+
 .flexbox-area-grow {
     -webkit-box-flex: 1;
     -webkit-flex: 1 1 0%;
     flex: 1 1 0%;
     min-width: 0;
 }
+
 .panel--scrollable {
     overflow: auto;
 }
+
 .panel--padded {
     padding: 1.5385rem;
 }
+
 .panel {
     margin-left: auto;
     margin-right: auto;
     width: 100%;
 }
+
 .panel {
     overflow: hidden;
 }

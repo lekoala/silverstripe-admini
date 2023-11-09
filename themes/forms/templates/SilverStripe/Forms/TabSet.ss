@@ -6,7 +6,7 @@
 		  <% if $Tabs %>
 			$FieldHolder
 		  <% else %>
-			<div $getAttributesHTML("class") class="tab-pane $extraClass<% if IsFirst %> active<% end_if %>">
+			<div $getAttributesHTML("class") class="tab-pane fade<% if $extraClass %> $extraClass<% end_if %><% if IsFirst && not HasPopover %> active<% end_if %>">
 				<% loop $Fields %>
 					$FieldHolder
 				<% end_loop %>

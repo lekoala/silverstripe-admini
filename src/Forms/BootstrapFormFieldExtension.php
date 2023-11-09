@@ -32,6 +32,7 @@ class BootstrapFormFieldExtension extends Extension
         $class = $attributes['class'] ?? '';
         $o = $this->owner;
 
+        //TODO: check if this is needed at all??
         switch (true) {
             case $o instanceof ReadonlyField:
                 $class = 'form-control ' . $class;
@@ -64,5 +65,13 @@ class BootstrapFormFieldExtension extends Extension
                 break;
         }
         $attributes['class'] = trim($class);
+    }
+
+    public function HasPopover()
+    {
+        if (str_contains($this->owner->extraClass(), 'popover-actions-simulate')) {
+            return true;
+        }
+        return false;
     }
 }

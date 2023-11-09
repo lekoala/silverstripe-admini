@@ -6,6 +6,7 @@ class SilverStripe {
     static init() {
         this.attachShowOnClick();
         this.subsiteSelector();
+        this.popoverSimulate();
         this.ping();
     }
 
@@ -18,6 +19,19 @@ class SilverStripe {
                 window.location.replace(
                     `${window.location.pathname}?${queryParams}`
                 );
+            });
+        });
+    }
+
+    static popoverSimulate() {
+        initialize(".popover-actions-simulate .nav-link", (link) => {
+            link.innerHTML = '<i class="material-icons-two-tone">more_vert</i>';
+            link.addEventListener("click", (ev) => {
+                let target = document.querySelector(link.dataset.bsTarget);
+                if (target.classList.contains("show")) {
+                    link.classList.remove(...["active"]);
+                    target.classList.remove(...["show", "active"]);
+                }
             });
         });
     }
