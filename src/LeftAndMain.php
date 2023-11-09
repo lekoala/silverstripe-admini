@@ -2,6 +2,7 @@
 
 namespace LeKoala\Admini;
 
+use Exception;
 use LogicException;
 use BadMethodCallException;
 use SilverStripe\i18n\i18n;
@@ -237,8 +238,8 @@ class LeftAndMain extends Controller implements PermissionProvider
      * @var array
      */
     private static $help_links = [
-        'CMS User help' => 'https://userhelp.silverstripe.org/en/4',
-        'Developer docs' => 'https://docs.silverstripe.org/en/4/',
+        'CMS User help' => 'https://userhelp.silverstripe.org/en/5',
+        'Developer docs' => 'https://docs.silverstripe.org/en/5/',
         'Community' => 'https://www.silverstripe.org/',
         'Feedback' => 'https://www.silverstripe.org/give-feedback/',
     ];
@@ -665,7 +666,7 @@ CSS;
 
     /**
      * Returns the link with the posted hash if any
-     * Depends on a _hash input in the
+     * Depends on a _hash input in the POST data
      *
      * @param string $action
      * @return string
@@ -757,6 +758,29 @@ CSS;
         $originalResponse->addHeader('Vary', 'X-Requested-With');
 
         return $response;
+    }
+
+     /**
+     * Throws a HTTP error response encased in a {@link HTTPResponse_Exception}, which is later caught in
+     * {@link RequestHandler::handleAction()} and returned to the user.
+     *
+     * @param int $errorCode
+     * @param string $errorMessage Plaintext error message
+     * @uses HTTPResponse_Exception
+     * @throws HTTPResponse_Exception
+     */
+    public function httpError($errorCode, $errorMessage = null)
+    {
+        $request = $this->getRequest();
+
+        // Call a handler method such as onBeforeHTTPError404
+        $this->extend("onBeforeHTTPError{$errorCode}", $request, $errorMessage);
+
+        // Call a handler method such as onBeforeHTTPError, passing 404 as the first arg
+        $this->extend('onBeforeHTTPError', $errorCode, $request, $errorMessage);
+
+        // Throw a new exception
+        throw new HTTPResponse_Exception($errorMessage, $errorCode);
     }
 
     /**

@@ -223,3 +223,22 @@ Fix overflow issue
 .select2-hidden-accessible {
     top: 0;
 }
+
+/*
+Tabulator
+*/
+
+.tabulator-tools .tabulator-bulk-confirm.btn {
+    margin-inline-start: 0;
+    background: var(--bs-light);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.tabulator-tools .tabulator-bulk-select {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-color: var(--bs-light);
+    padding-left: 0.5em;
+    padding-right: 1em;
+}
